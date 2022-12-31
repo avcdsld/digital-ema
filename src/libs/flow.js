@@ -24,7 +24,7 @@ export const connectWallet = async (setter) => {
                     ? "https://fcl-discovery.onflow.org/authn"
                     : "https://fcl-discovery.onflow.org/testnet/authn",
             "app.detail.title": "Digital Ema",
-            "app.detail.icon": "https://sakutaro.on.fleek.co/favicon.ico",
+            "app.detail.icon": "https://digital-ema.vercel.app/favicon.ico",
             "fcl.network": network || "testnet",
         });
 

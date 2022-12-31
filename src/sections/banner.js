@@ -4,7 +4,7 @@ import { jsx, Box, Container, Button, Image } from 'theme-ui';
 import { rgba } from 'polished';
 import SectionHeading from 'components/section-heading';
 import { Link } from 'components/link';
-import illustration from 'assets/images/ema/banner1.svg';
+import illustration from 'assets/images/ema/banner1.png';
 import { useLocale } from 'hooks/useLocale';
 
 const Banner = () => {
