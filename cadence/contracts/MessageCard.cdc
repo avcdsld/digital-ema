@@ -25,7 +25,6 @@ pub contract MessageCard: NonFungibleToken {
     access(account) var externalURLBase: String?
     access(account) var nftCollectionDisplay: MetadataViews.NFTCollectionDisplay?
 
-
     pub event ContractInitialized()
     pub event Withdraw(id: UInt64, from: Address?)
     pub event Deposit(id: UInt64, to: Address?)

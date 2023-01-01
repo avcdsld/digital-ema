@@ -20,6 +20,9 @@ const Create = () => {
   const [isTxSealed, setTxSealed] = useState(false);
   const [message, setMessage] = useState('');
   const [name, setName] = useState('');
+  const [dappyEyeColor, setDappyEyeColor] = useState('#ff5a9d');
+  const [dappyStripe1Color, setDappyStripe1Color] = useState('#ffe922');
+  const [dappyStripe2Color, setDappyStripe2Color] = useState('#60c5e5');
   const [modalIsOpen, setIsOpen] = useState(false);
 
   Modal.setAppElement('#__next');
@@ -39,7 +42,7 @@ const Create = () => {
       if (!message || !name) {
         alert('Something Wrong.');
       } else {
-        const tx = await mintEma(message, getTodayDateStr() + ' ' + name);
+        const tx = await mintEma(message, getTodayDateStr() + ' ' + name, dappyEyeColor, dappyStripe1Color, dappyStripe2Color);
         setTxSealed(false);
         setTxId(tx.transactionId);
         subscribeTx(tx, setTxSealed);
@@ -69,6 +72,27 @@ const Create = () => {
     return (y + '/' + m + '/' + d);
   }
 
+  const dappyColors = [
+    ['#FF5A9D', '#FFE922', '#60C5E5'],
+    ['#94DFF6', '#F6ABBA', '#94DFF6'],
+    ['#74ee15', '#cae36f', '#6b6b49'],
+    ['#D61774', '#9D5098', '#1F429C'],
+    ['#F8EF38', '#8D5FA8', '#211F20'],
+    ['#A3A5A4', '#8D5FA8', '#211F20'],
+    ['#A3A5A4', '#BCDA84', '#211F20'],
+    ['#001DED', '#E84B56', '#211F20'],
+    ['#D50E8D', '#5BBD70', '#068DCF'],
+  ];
+
+  const updateSvg = (_message, _name) => {
+    setMessage(_message);
+    setName(_name);
+    const [eyeColor, stripeColor1, stripeColor2] = dappyColors[(_message + _name).length % dappyColors.length];
+    setDappyEyeColor(eyeColor);
+    setDappyStripe1Color(stripeColor1);
+    setDappyStripe2Color(stripeColor2);
+  }
+
   useEffect(() => {
     if (isTxSealed) {
       returnTop();
@@ -86,10 +110,10 @@ const Create = () => {
 
         <Box sx={styles.contentWrapper}>
           <p>{t.WISHES_EXAMPLES}</p>
-          <Textarea placeholder={t.YOUR_WISH} rows={4} backgroundColor={'white'} onChange={(event) => { setMessage(event.target.value); }}></Textarea>
-          <Input placeholder={t.YOUR_NAME} backgroundColor={'white'} onChange={(event) => { setName(event.target.value); }} />
+          <Textarea placeholder={t.YOUR_WISH} rows={4} backgroundColor={'white'} onChange={(event) => { updateSvg(event.target.value, name); }}></Textarea>
+          <Input placeholder={t.YOUR_NAME} backgroundColor={'white'} onChange={(event) => { updateSvg(message, event.target.value); }} />
 
-          <EmaSvg message={message} name={name} dateStr={getTodayDateStr()}></EmaSvg>
+          <EmaSvg message={message} name={name} dateStr={getTodayDateStr()} eyeColor={dappyEyeColor} stripeColor1={dappyStripe1Color} stripeColor2={dappyStripe2Color}></EmaSvg>
 
           <Button onClick={openModal}>{t.BUTTON_MAKE_EMA}</Button>
         </Box>
@@ -130,13 +154,13 @@ const Create = () => {
             )}
           </Modal>
         </Box>
-      </Container>
+      </Container >
 
       {isTxSealed && <Confetti
         width={width}
         height={height}
       />}
-    </Box>
+    </Box >
   );
 };
 

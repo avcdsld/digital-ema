@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function EmaSvg({ message, name, dateStr }) {
+export default function EmaSvg({ message, name, dateStr, eyeColor, stripeColor1, stripeColor2 }) {
     const fontSize = message.length <= 7 ? "2.8em" :
         message.length <= 20 ? "1.8em" :
             message.length <= 40 ? "1.5em" :
@@ -30,7 +30,7 @@ export default function EmaSvg({ message, name, dateStr }) {
                             fillRule="evenodd"
                             clipRule="evenodd"
                             d="M 493.04,282.859 C 493.04,242.218 481.083,84.4307 328.083,60.5287 192.129,39.2851 79.4516,82.0429 50.768,218.31 22.0783,354.577 48.3742,481.28 148.782,493.238 249.196,505.189 277.88,500.407 383.069,495.625 488.258,490.844 493.04,323.499 493.04,282.859 Z"
-                            fill="#ff5a9d"
+                            fill={eyeColor}
                             id="path440-3-6" />
                     </mask>
                 </defs>
@@ -66,7 +66,7 @@ export default function EmaSvg({ message, name, dateStr }) {
                             fillRule="evenodd"
                             clipRule="evenodd"
                             d="M 493.04,282.859 C 493.04,242.218 481.083,84.4307 328.083,60.5287 192.129,39.2851 79.4516,82.0429 50.768,218.31 22.0783,354.577 48.3742,481.28 148.782,493.238 249.196,505.189 277.88,500.407 383.069,495.625 488.258,490.844 493.04,323.499 493.04,282.859 Z"
-                            fill="#ff5a9d"
+                            fill={eyeColor}
                             id="path785" />
                     </mask>
                     <g
@@ -78,7 +78,7 @@ export default function EmaSvg({ message, name, dateStr }) {
                             width="148.78"
                             height="1786.53"
                             transform="rotate(25.3087,309.319,-350.467)"
-                            fill="#ff5a9d"
+                            fill={eyeColor}
                             id="rect789" />
                         <rect
                             x="467.60501"
@@ -86,7 +86,7 @@ export default function EmaSvg({ message, name, dateStr }) {
                             width="161.65601"
                             height="1941.13"
                             transform="rotate(25.3087,467.605,-345.085)"
-                            fill="#ffe922"
+                            fill={stripeColor1}
                             id="rect791" />
                         <rect
                             x="666.44098"
@@ -94,7 +94,7 @@ export default function EmaSvg({ message, name, dateStr }) {
                             width="179.817"
                             height="2159.21"
                             transform="rotate(25.3087,666.441,-387.71)"
-                            fill="#60c5e5"
+                            fill={stripeColor2}
                             id="rect793" />
                     </g>
                     <path
@@ -105,7 +105,7 @@ export default function EmaSvg({ message, name, dateStr }) {
                         id="path797" />
                     <path
                         d="M 130.708,210 C 106.104,210 91,231.473 91,249.08 c 0,38.076 43.377,73.425 74,95.92 30.623,-22.503 74,-57.844 74,-95.92 C 239,231.471 223.903,210 199.292,210 185.549,210 173.804,220.934 165,231.315 156.188,220.933 144.452,210 130.708,210 Z"
-                        fill="#ff5a9d"
+                        fill={eyeColor}
                         id="path799" />
                     <path
                         fillRule="evenodd"
@@ -115,7 +115,7 @@ export default function EmaSvg({ message, name, dateStr }) {
                         id="path801" />
                     <path
                         d="M 324.708,204 C 300.104,204 285,225.474 285,243.081 c 0,38.076 43.377,73.425 74,95.92 30.623,-22.503 74,-57.844 74,-95.92 C 433,225.472 417.903,204 393.292,204 379.549,204 367.804,214.935 359,225.316 350.188,214.934 338.452,204 324.708,204 Z"
-                        fill="#ff5a9d"
+                        fill={eyeColor}
                         id="path803" />
                     <path
                         fillRule="evenodd"

@@ -1,7 +1,7 @@
 import * as fcl from "@onflow/fcl";
 
-export const network = 'testnet';
-// export const network = 'mainnet';
+// export const network = 'testnet';
+export const network = 'mainnet';
 
 export const explorerUrl = network === "mainnet" ? "https://flowscan.org/transaction/" : "https://testnet.flowscan.org/transaction/";
 
@@ -9,9 +9,9 @@ export const flowviewUrl = network === "mainnet" ? "https://flowview.app/account
 
 export const nonFungibleTokenAddress = network === "mainnet" ? "0x1d7e57aa55817448" : "0x631e88ae7f1d7c20";
 
-export const nftAddress = network === "mainnet" ? "TODO" : "0xaba79a97beda460a";
-export const showcaseAddress = network === "mainnet" ? "TODO" : "0xaba79a97beda460a";
-export const templateCreatorAddress = network === "mainnet" ? "TODO" : "0xaba79a97beda460a";
+export const nftAddress = network === "mainnet" ? "0xf38fadaba79009cc" : "0xaba79a97beda460a";
+export const showcaseAddress = network === "mainnet" ? "0x67fb6951287a2908" : "0xaba79a97beda460a";
+export const templateCreatorAddress = network === "mainnet" ? "0x67fb6951287a2908" : "0xaba79a97beda460a";
 export const templateId = network === "mainnet" ? '1' : '1'; // Digital Ema - Dappy
 
 export const connectWallet = async (setter) => {
@@ -261,7 +261,7 @@ pub fun main(from: Int, upTo: Int): [String] {
     return svg;
 };
 
-export const mintEma = async (message, name) => {
+export const mintEma = async (message, name, eyeColor, stripe1Color, stripe2Color) => {
     const isSealed = false;
     const blockResponse = await fcl.send([fcl.getBlock(isSealed)]);
     const block = await fcl.decode(blockResponse);
@@ -310,7 +310,13 @@ transaction(
                 { key: '$messageFontSize', value: messageFontSize },
                 { key: '$name', value: name },
                 { key: '$nameFontSize', value: '0.8em' },
+                { key: '$eyeColor', value: eyeColor },
+                { key: '$stripeColor1', value: stripe1Color },
+                { key: '$stripeColor2', value: stripe2Color },
             ], fcl.t.Dictionary([
+                { key: fcl.t.String, value: fcl.t.String },
+                { key: fcl.t.String, value: fcl.t.String },
+                { key: fcl.t.String, value: fcl.t.String },
                 { key: fcl.t.String, value: fcl.t.String },
                 { key: fcl.t.String, value: fcl.t.String },
                 { key: fcl.t.String, value: fcl.t.String },
