@@ -42,7 +42,7 @@ const Emas = () => {
       });
       console.log(svgs);
       if (svgs.length > 0) {
-        setEmaSvgs([...svgs, ...emaSvgs]);
+        setEmaSvgs([...emaSvgs, ...svgs]);
       } else {
         setAllFetched(true);
       }
