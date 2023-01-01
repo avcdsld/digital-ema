@@ -16,7 +16,7 @@ const Emas = () => {
 
   useEffect(() => {
     const from = 0;
-    const upTo = from + 7;
+    const upTo = from + 8;
     viewAllEmas(from, upTo).then(rawSvgs => {
       if (rawSvgs && rawSvgs.length > 0) {
         setLastUpTo(upTo);
@@ -32,8 +32,8 @@ const Emas = () => {
   const loadMore = async () => {
     try {
       setFetching(true);
-      const from = lastUpTo + 1;
-      const upTo = from + 7;
+      const from = lastUpTo;
+      const upTo = from + 8;
       const rawSvgs = await viewAllEmas(from, upTo);
       setLastUpTo(upTo);
       const svgs = rawSvgs.map(rawSvg => {
@@ -66,8 +66,8 @@ const Emas = () => {
             {emaSvgs.length > 0 && (
               <Grid gap={2} columns={[2, null, null, 4]}>
                 {emaSvgs.map((emaSvg, i) => (
-                  <Box sx={styles.emasWrapper} key={i}>
-                    <img key={i} src={`data:image/svg+xml;base64,${emaSvg}`} />
+                  <Box sx={styles.emasWrapper} key={i+1}>
+                    <img key={i+1} src={`data:image/svg+xml;base64,${emaSvg}`} />
                   </Box>
                 ))}
               </Grid>
