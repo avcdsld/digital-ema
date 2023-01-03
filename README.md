@@ -1,30 +1,41 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/zeit/next.js/tree/canary/packages/create-next-app).
+# Digital Ema on Flow Blockchain
 
-## Getting Started
+## ❓ What's this?
 
-First, run the development server:
+- Dapp for creating a digital ema (wooden board with New Year's wishes) using the Flow blockchain.
+- Open source resources that exemplify Cadence and Flow Dapp.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## ⛩ Website
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- https://digital-ema.vercel.app/en
+- https://digital-ema.vercel.app/ja
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## 🔎 Project Overview
 
-## Learn More
+### Frontend (Static Website) [./src](./src)
 
-To learn more about Next.js, take a look at the following resources:
+The front end is built by Next.js, which uses FCL (Flow Client Library) to interact with wallets and smart contracts; there is no back-end API.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Smart Contracts ([./cadence](./cadence/))
 
-You can check out [the Next.js GitHub repository](https://github.com/zeit/next.js/) - your feedback and contributions are welcome!
+I designed and implemented a generic contracts to create digital message cards.
 
-## Deploy on ZEIT Now
+- MessageCard.cdc
+    - The main contract for creating message card templates and messages.
+    - Mainnet: https://flowscan.org/contract/A.f38fadaba79009cc.MessageCard/overview
 
-The easiest way to deploy your Next.js app is to use the [ZEIT Now Platform](https://zeit.co/) from the creators of Next.js.
+- MessageCardRenderers.cdc
+    - This is the implementation of the renderer created to make the template for this ema. Users can also create their own renderer.
+    - Mainnet: https://flowscan.org/contract/A.f38fadaba79009cc.MessageCardRenderers/overview
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- EmaShowcase.cdc
+    - A contract made so that you can get a list of everyone's emas. It is independent from the MessageCard as a separate contract.
+    - Mainnet: https://flowscan.org/contract/A.67fb6951287a2908.EmaShowcase/overview
+
+## 📷 Screenshots
+
+<img width="1208" alt="ScreenShot 2023-01-01 11 49 29" src="https://user-images.githubusercontent.com/10495516/210331662-41e78543-d11f-4650-8e72-59c8efe1612e.png">
+
+<img width="927" alt="ScreenShot 2023-01-01 12 27 05" src="https://user-images.githubusercontent.com/10495516/210331688-1aab1e88-7183-4933-81a0-0053f0e206a2.png">
+
+<img width="1419" alt="ScreenShot 2023-01-03 19 00 51" src="https://user-images.githubusercontent.com/10495516/210335568-aff6c1fb-a650-4bd1-9627-3ed8defebebf.png">
