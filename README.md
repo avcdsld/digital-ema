@@ -12,7 +12,7 @@
 
 ## 🔎 Project Overview
 
-### Frontend (Static Website) [./src](./src)
+### Frontend (Static Website) ([./src](./src))
 
 The front end is built by Next.js, which uses FCL (Flow Client Library) to interact with wallets and smart contracts; there is no back-end API.
 
