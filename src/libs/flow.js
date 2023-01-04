@@ -1,7 +1,7 @@
 import * as fcl from "@onflow/fcl";
 
 // export const network = 'testnet';
-export const network = 'mainnet';
+export const network = process.env.NEXT_PUBLIC_FLOW_NETWORK || 'mainnet';
 
 export const explorerUrl = network === "mainnet" ? "https://flowscan.org/transaction/" : "https://testnet.flowscan.org/transaction/";
 
