@@ -34,8 +34,8 @@ I designed and implemented a generic contracts to create digital message cards.
 
 ## 📷 Screenshots
 
-<img width="1208" alt="ScreenShot 2023-01-01 11 49 29" src="https://user-images.githubusercontent.com/10495516/210331662-41e78543-d11f-4650-8e72-59c8efe1612e.png">
+<img width="1208" alt="ScreenShot1" src="https://user-images.githubusercontent.com/10495516/210331662-41e78543-d11f-4650-8e72-59c8efe1612e.png">
 
-<img width="927" alt="ScreenShot 2023-01-01 12 27 05" src="https://user-images.githubusercontent.com/10495516/210331688-1aab1e88-7183-4933-81a0-0053f0e206a2.png">
+<img width="927" alt="ScreenShot2" src="https://user-images.githubusercontent.com/10495516/210331688-1aab1e88-7183-4933-81a0-0053f0e206a2.png">
 
-<img width="1419" alt="ScreenShot 2023-01-03 19 00 51" src="https://user-images.githubusercontent.com/10495516/210335568-aff6c1fb-a650-4bd1-9627-3ed8defebebf.png">
+<img width="1419" alt="ScreenShot3" src="https://user-images.githubusercontent.com/10495516/210335568-aff6c1fb-a650-4bd1-9627-3ed8defebebf.png">
