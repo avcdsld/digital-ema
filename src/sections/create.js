@@ -104,7 +104,7 @@ const Create = () => {
       <Container>
         <SectionHeading
           sx={styles.heading}
-          title={t.WRITE_WISHES_FOR_2023}
+          title={t.WRITE_WISHES_FOR_NEW_YEAR}
           description={t.WRITE_WISHES_DESCRIPTION}
         />
 

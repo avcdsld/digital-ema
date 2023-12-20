@@ -16,7 +16,7 @@ export default function Footer() {
           ))}
         </Box>
         <Text as="p" sx={styles.copyright}>
-          © 2023 Ara ⛓️ Built on Flow
+          © Ara ⛓️ Built on Flow
         </Text>
       </Container>
     </Box>
