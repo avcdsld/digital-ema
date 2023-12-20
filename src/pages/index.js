@@ -9,7 +9,7 @@ import FAQ from 'sections/faq';
 
 export default function IndexPage() {
   return (
-    <ThemeUIProvider theme={theme}>
+    <ThemeUIProvider>
       <Layout>
         <SEO
           title="Digital Ema on Flow Blockchain"
