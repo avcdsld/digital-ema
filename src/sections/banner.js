@@ -4,8 +4,9 @@ import { jsx, Box, Container, Button, Image } from 'theme-ui';
 import { rgba } from 'polished';
 import SectionHeading from 'components/section-heading';
 import { Link } from 'components/link';
-import illustration from 'assets/images/ema/banner1.png';
 import { useLocale } from 'hooks/useLocale';
+
+const illustration = '/assets/images/ema/banner2024.png';
 
 const Banner = () => {
   const { t } = useLocale();
@@ -57,6 +58,19 @@ const styles = {
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-end',
+    a: {
+      textDecoration: 'none',
+      textDecorationLine: 'none',
+      color: 'white',
+      '&:visited': {
+        color: 'white',
+      },
+      span: {
+        color: 'white',
+        textDecoration: 'none',
+        textDecorationLine: 'none',
+      },
+    },
   },
   heading: {
     mb: [30],

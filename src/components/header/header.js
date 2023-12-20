@@ -101,6 +101,8 @@ const styles = {
     },
     a: {
       cursor: 'pointer',
+      color: '#343D48',
+      textDecoration: 'none',
       fontWeight: 400,
       padding: 0,
       margin: [0, 0, 0, 0, '0 20px'],

@@ -3,10 +3,11 @@
 import { jsx, Box, Container, Heading, Text, Image } from 'theme-ui';
 import Tabs, { TabPane } from 'rc-tabs';
 import { rgba } from 'polished';
-import tabImage1 from 'assets/images/tab-illustration-1.jpeg';
-import tabImage2 from 'assets/images/tab-illustration-2.jpeg';
-import tabImage3 from 'assets/images/tab-illustration-3.jpeg';
 import { useLocale } from 'hooks/useLocale';
+
+const tabImage1 = '/assets/images/tab-illustration-1.jpeg';
+const tabImage2 = '/assets/images/tab-illustration-2.jpeg';
+const tabImage3 = '/assets/images/tab-illustration-3.jpeg';
 
 const FAQ = () => {
   const { t } = useLocale();

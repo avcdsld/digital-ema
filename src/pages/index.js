@@ -1,4 +1,4 @@
-import { ThemeProvider } from 'theme-ui';
+import { ThemeUIProvider } from 'theme-ui';
 import theme from 'theme';
 import SEO from 'components/seo';
 import Layout from 'components/layout';
@@ -9,7 +9,7 @@ import FAQ from 'sections/faq';
 
 export default function IndexPage() {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeUIProvider theme={theme}>
       <Layout>
         <SEO
           title="Digital Ema on Flow Blockchain"
@@ -20,6 +20,6 @@ export default function IndexPage() {
         <Emas />
         <FAQ />
       </Layout>
-    </ThemeProvider>
+    </ThemeUIProvider>
   );
 }

@@ -1,5 +1,5 @@
-import twitter from 'assets/images/icons/twitter.png';
-import github from 'assets/images/icons/github.png';
+const twitter = '/assets/images/icons/twitter.png';
+const github = '/assets/images/icons/github.png';
 
 export const menuItems = [
   {
