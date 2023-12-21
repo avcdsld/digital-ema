@@ -237,7 +237,7 @@ const styles = {
     justifyContent: 'flex-end',
     p: {
       color: 'heading',
-      fontSize: [0.8, null, null, 1],
+      fontSize: [1, null, null, 1],
       lineHeight: [1.58, 1.58, 1.58, 1.58],
       pb: [2],
     },
