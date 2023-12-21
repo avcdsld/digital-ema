@@ -4,6 +4,11 @@ flow transactions send ./transactions/setup_account.cdc --signer emulator-accoun
 flow transactions send ./transactions/add_allowed_template.cdc 1 --signer emulator-account
 flow transactions send ./transactions/add_allowed_template.cdc 2 --signer emulator-account
 flow transactions send ./transactions/add_allowed_template.cdc 3 --signer emulator-account
+flow transactions send ./transactions/add_allowed_template.cdc 4 --signer emulator-account
+flow transactions send ./transactions/add_allowed_template.cdc 5 --signer emulator-account
+flow transactions send ./transactions/add_allowed_template.cdc 6 --signer emulator-account
+flow transactions send ./transactions/add_allowed_template.cdc 7 --signer emulator-account
+flow transactions send ./transactions/add_allowed_template.cdc 8 --signer emulator-account
 
 # Setup (Users): 0x01cf0e2f2f715450
 flow accounts create --key a4a6a6c3503d28935c3ab30327345c16f98e592f17dd7ed55168e8855d94b9b0e600e7cbc16c443b01f55213d470a5fe29d5694f3d5e29ef87a5f36587c0c7e8
@@ -29,7 +34,10 @@ flow transactions send ./transactions/mint_nft.cdc \
             { "key": { "type": "String", "value": "$message"}, "value": { "type": "String", "value": "家族全員が安全に毎日を過ごせますように" }},
             { "key": { "type": "String", "value": "$name"}, "value": { "type": "String", "value": "2023/01/01 Ara" }},
             { "key": { "type": "String", "value": "$messageFontSize"}, "value": { "type": "String", "value": "1.8em" }},
-            { "key": { "type": "String", "value": "$nameFontSize"}, "value": { "type": "String", "value": "0.8em" }}
+            { "key": { "type": "String", "value": "$nameFontSize"}, "value": { "type": "String", "value": "0.8em" }},
+            { "key": { "type": "String", "value": "$eyeColor"}, "value": { "type": "String", "value": "#FF5A9D" }},
+            { "key": { "type": "String", "value": "$stripeColor1"}, "value": { "type": "String", "value": "#FFE922" }},
+            { "key": { "type": "String", "value": "$stripeColor2"}, "value": { "type": "String", "value": "#60C5E5" }}
         ]},
         { "type": "Address", "value": "0x01cf0e2f2f715450" },
         { "type": "UInt64", "value": "1" }
