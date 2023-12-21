@@ -228,8 +228,7 @@ pub contract MessageCard: NonFungibleToken {
         }
 
         pub fun borrowViewResolver(id: UInt64): &AnyResource{MetadataViews.Resolver} {
-            let nft = (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)! as! &MessageCard.NFT
-            return nft as &AnyResource{MetadataViews.Resolver}
+            return (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)! as! &MessageCard.NFT
         }
 
         pub fun updateParams(id: UInt64, params: {String: AnyStruct}) {
