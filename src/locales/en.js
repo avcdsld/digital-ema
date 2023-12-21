@@ -31,6 +31,6 @@ export default {
     MODAL_SUBMIT: "Submit",
     MODAL_MESSAGE3: "Transaction is being processed. It will take up to 1 minute.",
     MODAL_MESSAGE4: "Congratulations! Your Digital Ema has been created.",
-    MODAL_CHECK_ON_FLOWSCAN: "Check with Flowscan↗",
+    MODAL_CHECK_ON_FLOWDIVER: "Check with Flow Diver↗",
     MODAL_GOTO_MY_EMA: "Go to My Ema Page",
 }

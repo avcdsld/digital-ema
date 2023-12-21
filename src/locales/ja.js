@@ -31,6 +31,6 @@ export default {
     MODAL_SUBMIT: "送信する",
     MODAL_MESSAGE3: "トランザクション処理中です。最大 1 分程かかります。",
     MODAL_MESSAGE4: "おめでとうございます。あなたのデジタル絵馬が作成されました。",
-    MODAL_CHECK_ON_FLOWSCAN: "Flowscan で確認↗",
+    MODAL_CHECK_ON_FLOWDIVER: "Flow Diver で確認↗",
     MODAL_GOTO_MY_EMA: "マイ絵馬ページへ",
 }

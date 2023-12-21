@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { useEffect, useState } from 'react';
-import { jsx, Box, Textarea, Input, Button, Spinner, Container } from 'theme-ui';
+import { jsx, Box, Textarea, Input, Button, Spinner, Container, Flex, Label, Radio, Text } from 'theme-ui';
 import { rgba } from 'polished';
 import useWindowSize from 'react-use/lib/useWindowSize';
 import EmaSvg from 'components/preview/ema-svg';
@@ -20,9 +20,11 @@ const Create = () => {
   const [isTxSealed, setTxSealed] = useState(false);
   const [message, setMessage] = useState('');
   const [name, setName] = useState('');
+  const [templateName, setTemplateName] = useState('dappy');
   const [dappyEyeColor, setDappyEyeColor] = useState('#ff5a9d');
   const [dappyStripe1Color, setDappyStripe1Color] = useState('#ffe922');
   const [dappyStripe2Color, setDappyStripe2Color] = useState('#60c5e5');
+  const [singleColor, setSingleColor] = useState('#000000');
   const [modalIsOpen, setIsOpen] = useState(false);
 
   Modal.setAppElement('#__next');
@@ -42,7 +44,26 @@ const Create = () => {
       if (!message || !name) {
         alert('Something Wrong.');
       } else {
-        const tx = await mintEma(message, getTodayDateStr() + ' ' + name, dappyEyeColor, dappyStripe1Color, dappyStripe2Color);
+        const messageFontSize = message.length <= 7 ? '2.8em' :
+                                  message.length <= 20 ? '1.8em' :
+                                    message.length <= 40 ? '1.5em' :
+                                      message.length <= 60 ? '1.2em' : '1em';
+        const params = templateName === 'dappy' ? {
+          message,
+          messageFontSize,
+          name: getTodayDateStr() + ' ' + name,
+          nameFontSize: '0.8em',
+          eyeColor: dappyEyeColor,
+          stripeColor1: dappyStripe1Color,
+          stripeColor2: dappyStripe2Color,
+        } : {
+          message,
+          messageFontSize,
+          name: getTodayDateStr() + ' ' + name,
+          nameFontSize: '0.8em',
+          color: singleColor,
+        };
+        const tx = await mintEma({ templateName, params });
         setTxSealed(false);
         setTxId(tx.transactionId);
         subscribeTx(tx, setTxSealed);
@@ -83,6 +104,13 @@ const Create = () => {
     ['#001DED', '#E84B56', '#211F20'],
     ['#D50E8D', '#5BBD70', '#068DCF'],
   ];
+  const singleColors = [
+    '#000000', // 黒色
+    '#91b493', // まっ茶色	
+    '#8b81c3', // 藤色
+    '#fed4ea', // 桜色
+    '#00a3af', // 浅葱色
+  ];
 
   const updateSvg = (_message, _name) => {
     setMessage(_message);
@@ -91,7 +119,13 @@ const Create = () => {
     setDappyEyeColor(eyeColor);
     setDappyStripe1Color(stripeColor1);
     setDappyStripe2Color(stripeColor2);
+    const singleColor = singleColors[(_message + _name).length % singleColors.length];
+    setSingleColor(singleColor);
   }
+
+  const handleRadioChange = (e) => {
+    setTemplateName(e.target.value);
+  };
 
   useEffect(() => {
     if (isTxSealed) {
@@ -113,7 +147,25 @@ const Create = () => {
           <Textarea placeholder={t.YOUR_WISH} rows={4} backgroundColor={'white'} onChange={(event) => { updateSvg(event.target.value, name); }}></Textarea>
           <Input placeholder={t.YOUR_NAME} backgroundColor={'white'} onChange={(event) => { updateSvg(message, event.target.value); }} />
 
-          <EmaSvg message={message} name={name} dateStr={getTodayDateStr()} eyeColor={dappyEyeColor} stripeColor1={dappyStripe1Color} stripeColor2={dappyStripe2Color}></EmaSvg>
+          <Flex mt={2} mb={3} style={{width: '90%'}}>
+            <Label mr={2}>
+              <Radio name="templateName" value="dappy" onChange={handleRadioChange} defaultChecked={true} />Dappy
+            </Label>
+            <Label mr={2}>
+              <Radio name="templateName" value="dragon" onChange={handleRadioChange} />辰
+            </Label>
+            <Label mr={2}>
+              <Radio name="templateName" value="fuji" onChange={handleRadioChange} />富士
+            </Label>
+            <Label mr={2}>
+              <Radio name="templateName" value="origami" onChange={handleRadioChange} />鶴
+            </Label>
+            <Label>
+              <Radio name="templateName" value="flower" onChange={handleRadioChange} />花
+            </Label>
+          </Flex>
+
+          <EmaSvg message={message} name={name} dateStr={getTodayDateStr()} templateName={templateName} eyeColor={dappyEyeColor} stripeColor1={dappyStripe1Color} stripeColor2={dappyStripe2Color} singleColor={singleColor}></EmaSvg>
 
           <Button onClick={openModal}>{t.BUTTON_MAKE_EMA}</Button>
         </Box>
@@ -142,14 +194,14 @@ const Create = () => {
             ) : !isTxSealed ? (
               <span>
                 <p>{t.MODAL_MESSAGE3}</p>
-                {txId && <p><a style={{ color: '#343D48' }} href={explorerUrl + txId} target={'_blank'}>{t.MODAL_CHECK_ON_FLOWSCAN}</a></p>}
+                {txId && <p><a style={{ color: '#343D48' }} href={explorerUrl + txId} target={'_blank'}>{t.MODAL_CHECK_ON_FLOWDIVER}</a></p>}
                 <Spinner size={32} ml={2} mr={2} />
               </span>
             ) : (
               <span>
                 <p>{t.MODAL_MESSAGE4}</p>
                 <p><a style={{ color: '#343D48' }} href={locale === 'ja' ? `/ja/view/${account.addr}` : `/view/${account.addr}`}>{t.MODAL_GOTO_MY_EMA}</a></p>
-                {txId && <p><a style={{ color: '#343D48' }} href={explorerUrl + txId} target={'_blank'}>{t.MODAL_CHECK_ON_FLOWSCAN}</a></p>}
+                {txId && <p><a style={{ color: '#343D48' }} href={explorerUrl + txId} target={'_blank'}>{t.MODAL_CHECK_ON_FLOWDIVER}</a></p>}
               </span>
             )}
           </Modal>

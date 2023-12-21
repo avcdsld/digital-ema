@@ -3,16 +3,29 @@ import * as fcl from "@onflow/fcl";
 // export const network = 'testnet';
 export const network = process.env.NEXT_PUBLIC_FLOW_NETWORK || 'mainnet';
 
-export const explorerUrl = network === "mainnet" ? "https://flowscan.org/transaction/" : "https://testnet.flowscan.org/transaction/";
+export const explorerUrl = network === "mainnet" ? "https://flowdiver.io/tx/" : "https://testnet.flowdiver.io/tx/";
 
 export const flowviewUrl = network === "mainnet" ? "https://flowview.app/account/" : "https://testnet.flowview.app/account/";
 
 export const nonFungibleTokenAddress = network === "mainnet" ? "0x1d7e57aa55817448" : "0x631e88ae7f1d7c20";
 
-export const nftAddress = network === "mainnet" ? "0xf38fadaba79009cc" : "0xaba79a97beda460a";
-export const showcaseAddress = network === "mainnet" ? "0x67fb6951287a2908" : "0xaba79a97beda460a";
-export const templateCreatorAddress = network === "mainnet" ? "0x67fb6951287a2908" : "0xaba79a97beda460a";
+export const nftAddress = network === "mainnet" ? "0xf38fadaba79009cc" : "0x26469acda7819263";
+export const showcaseAddress = network === "mainnet" ? "0x67fb6951287a2908" : "0x26469acda7819263";
+export const templateCreatorAddress = network === "mainnet" ? "0x67fb6951287a2908" : "0x26469acda7819263";
 export const templateId = network === "mainnet" ? '1' : '1'; // Digital Ema - Dappy
+export const templateNameToId = network === "mainnet" ? {
+    dappy: '1',
+    dragon: '2',
+    fuji: '3',
+    origami: '4',
+    flower: '5',
+} : {
+    dappy: '1',
+    dragon: '2',
+    fuji: '3',
+    origami: '4',
+    flower: '5',
+};
 
 export const connectWallet = async (setter) => {
     try {
@@ -69,8 +82,8 @@ export const viewEmas = async (address) => {
 import MetadataViews from ${nonFungibleTokenAddress}
 import MessageCard from ${nftAddress}
 
-pub fun main(address: Address): [String] {
-    var res: [String] = []
+pub fun main(address: Address): {UInt64: String} {
+    var res: {UInt64: String} = {}
     let collection = getAccount(address)
         .getCapability(MessageCard.CollectionPublicPath)
         .borrow<&{MessageCard.CollectionPublic}>()
@@ -80,7 +93,7 @@ pub fun main(address: Address): [String] {
             let nft = collection!.borrowMessageCard(id: id)!
             let traits = (nft.resolveView(Type<MetadataViews.Traits>())!) as! MetadataViews.Traits
             let svg = traits.traits[1].value as! String
-            res.append(svg)
+            res[id] = svg
         }
         return res
     }
@@ -261,7 +274,7 @@ pub fun main(from: Int, upTo: Int): [String] {
     return svg;
 };
 
-export const mintEma = async (message, name, eyeColor, stripe1Color, stripe2Color) => {
+export const mintEma = async ({ templateName, params }) => {
     const isSealed = false;
     const blockResponse = await fcl.send([fcl.getBlock(isSealed)]);
     const block = await fcl.decode(blockResponse);
@@ -297,34 +310,22 @@ transaction(
     }
 }`;
 
-    const messageFontSize = message.length <= 7 ? '2.8em' :
-        message.length <= 20 ? '1.8em' :
-            message.length <= 40 ? '1.5em' :
-                message.length <= 60 ? '1.2em' : '1em';
+    const dictionaryEntries = Object.entries(params).map(([key, value]) => ({ key: '$' + key, value }));
+
+    const fclArgs = fcl.args([
+        fcl.arg(dictionaryEntries, fcl.t.Dictionary(dictionaryEntries.map(() => ({
+            key: fcl.t.String, 
+            value: fcl.t.String
+        })))),
+        fcl.arg(templateCreatorAddress, fcl.t.Address),
+        fcl.arg(templateNameToId[templateName], fcl.t.UInt64),
+    ]);
+
+    console.log()
 
     return await fcl.send([
         fcl.transaction(txCode),
-        fcl.args([
-            fcl.arg([
-                { key: '$message', value: message },
-                { key: '$messageFontSize', value: messageFontSize },
-                { key: '$name', value: name },
-                { key: '$nameFontSize', value: '0.8em' },
-                { key: '$eyeColor', value: eyeColor },
-                { key: '$stripeColor1', value: stripe1Color },
-                { key: '$stripeColor2', value: stripe2Color },
-            ], fcl.t.Dictionary([
-                { key: fcl.t.String, value: fcl.t.String },
-                { key: fcl.t.String, value: fcl.t.String },
-                { key: fcl.t.String, value: fcl.t.String },
-                { key: fcl.t.String, value: fcl.t.String },
-                { key: fcl.t.String, value: fcl.t.String },
-                { key: fcl.t.String, value: fcl.t.String },
-                { key: fcl.t.String, value: fcl.t.String },
-            ])),
-            fcl.arg(templateCreatorAddress, fcl.t.Address),
-            fcl.arg(templateId, fcl.t.UInt64),
-        ]),
+        fclArgs,
         fcl.proposer(fcl.authz),
         fcl.authorizations([fcl.authz]),
         fcl.payer(fcl.authz),
