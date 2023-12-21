@@ -32,7 +32,10 @@ const MyPage = () => {
 
   useEffect(() => {
     if (address && String(address).startsWith('0x')) {
-      viewEmas(address).then(rawSvgs => {
+      viewEmas(address).then(emas => {
+        const rawSvgs = Object.entries(emas)
+          .sort((a, b) => b[0] - a[0])
+          .map(ema => ema[1]);
         if (rawSvgs && rawSvgs.length > 0) {
           const svgs = rawSvgs.map(rawSvg => {
             const buff = Buffer.from(rawSvg);
