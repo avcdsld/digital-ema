@@ -22,15 +22,16 @@ I designed and implemented a generic contracts to create digital message cards.
 
 - MessageCard.cdc
     - The main contract for creating message card templates and messages.
-    - Mainnet: https://flowscan.org/contract/A.f38fadaba79009cc.MessageCard/overview
+    - Mainnet: https://www.flowdiver.io/contract/A.f38fadaba79009cc.MessageCard
 
 - MessageCardRenderers.cdc
     - This is the implementation of the renderer created to make the template for this ema. Users can also create their own renderer.
-    - Mainnet: https://flowscan.org/contract/A.f38fadaba79009cc.MessageCardRenderers/overview
+    - Mainnet: https://www.flowdiver.io/contract/A.f38fadaba79009cc.MessageCardRenderers
 
 - EmaShowcase.cdc
     - A contract made so that you can get a list of everyone's emas. It is independent from the MessageCard as a separate contract.
-    - Mainnet: https://flowscan.org/contract/A.67fb6951287a2908.EmaShowcase/overview
+    - Mainnet: https://www.flowdiver.io/contract/A.67fb6951287a2908.EmaShowcase
+
 
 ## 📷 Screenshots
 
