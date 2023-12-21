@@ -28,7 +28,7 @@ transaction {
                 "\" d=\"M 23.677,18.69 19.966,4.671 C 19.683,3.603 19.476,2.337 19.2,2.338 18.924,2.339 18.722,3.606 18.444,4.675 l -4.145,15.948 c -0.139,0.534 -0.228,1.415 -0.2,1.965 l 0.092,1.783 0.517,9.969 c 0.009,0.174 0.018,0.334 0.026,0.473 0.015,0.261 0.242,0.38 0.514,0.304 0.146,-0.04 0.315,-0.084 0.496,-0.128 l 2.479,-0.604 c 0.537,-0.129 1.406,-0.129 1.943,0.002 l 3.405,0.838 c 0.022,0.007 0.649,-10.018 0.649,-10.018 l 0.162,-2.619 c 0.017,-0.276 0.004,-0.633 -0.03,-0.989 -0.054,-0.544 -0.392,-1.841 -0.675,-2.909 z\" id=\"path20\" /></g>",
                 "<style type=\"text/css\">p {font-family: serif; color: black; font-size: ",
                 "$messageFontSize",
-                ";}</style><foreignObject x=\"30\" y=\"145\" width=\"345\" height=\"170\"><p xmlns=\"http://www.w3.org/1999/xhtml\">",
+                "; display: inline-block; vertical-align: middle;}</style><foreignObject x=\"30\" y=\"145\" width=\"345\" height=\"170\"><p xmlns=\"http://www.w3.org/1999/xhtml\">",
                 "$message",
                 "</p></foreignObject><foreignObject x=\"30\" y=\"290\" width=\"345\" height=\"50\"><p style=\"font-size: ",
                 "$nameFontSize",

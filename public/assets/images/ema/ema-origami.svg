@@ -78,7 +78,7 @@
   </g>
   <style
      type="text/css"
-     id="style17">p {font-family: serif; color: black; font-size: 1.8em;}</style>
+     id="style17">p {font-family: serif; color: black; font-size: 1.8em; display: inline-block;  vertical-align: middle;}</style>
   <foreignObject
      x="30"
      y="145"

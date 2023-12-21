@@ -116,7 +116,7 @@
        id="path805" />
   </g>
 
-  <style type="text/css">p {font-family: serif; color: black; font-size: 1.8em;}</style>
+  <style type="text/css">p {font-family: serif; color: black; font-size: 1.8em; display: inline-block;  vertical-align: middle;}</style>
   <foreignObject x="30" y="145" width="345" height="170">
     <p xmlns="http://www.w3.org/1999/xhtml">家族全員が安全に毎日を過ごせますように</p>
   </foreignObject>

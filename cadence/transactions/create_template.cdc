@@ -34,7 +34,7 @@ transaction {
                 "\" id=\"path803\" /><path fillRule=\"evenodd\" clipRule=\"evenodd\" d=\"m 441.719,223.839 c 0,16.456 -13.34,29.791 -29.79,29.791 -16.456,0 -29.79,-13.335 -29.79,-29.791 0,-16.45 13.334,-29.79 29.79,-29.79 16.45,0 29.79,13.34 29.79,29.79 z\" fill=\"#ffffff\" id=\"path805\" /></g>",
                 "<style type=\"text/css\">p {font-family: serif; color: black; font-size: ",
                 "$messageFontSize",
-                ";}</style><foreignObject x=\"30\" y=\"145\" width=\"345\" height=\"170\"><p xmlns=\"http://www.w3.org/1999/xhtml\">",
+                "; display: inline-block; vertical-align: middle;}</style><foreignObject x=\"30\" y=\"145\" width=\"345\" height=\"170\"><p xmlns=\"http://www.w3.org/1999/xhtml\">",
                 "$message",
                 "</p></foreignObject><foreignObject x=\"30\" y=\"290\" width=\"345\" height=\"50\"><p style=\"font-size: ",
                 "$nameFontSize",

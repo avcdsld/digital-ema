@@ -249,10 +249,10 @@ export default function EmaSvg({ message, name, dateStr, templateName, eyeColor,
                 {charcterSvgs[templateName]}
 
                 <foreignObject x="30" y="145" width="345" height="370">
-                    <p style={{ fontFamily: 'serif', color: 'black', fontSize }} xmlns="http://www.w3.org/1999/xhtml">{message}</p>
+                    <p style={{ fontFamily: 'serif', color: 'black', fontSize, display: 'inline-block', verticalAlign: 'middle' }} xmlns="http://www.w3.org/1999/xhtml">{message}</p>
                 </foreignObject>
                 <foreignObject x="30" y="290" width="345" height="370">
-                    <p style={{ fontSize: '0.8em', xmlns: "http://www.w3.org/1999/xhtml" }}>{dateStr} {name}</p>
+                    <p style={{ fontSize: '0.8em', display: 'inline-block', verticalAlign: 'middle', xmlns: "http://www.w3.org/1999/xhtml" }}>{dateStr} {name}</p>
                 </foreignObject>
             </svg>
         </div>
