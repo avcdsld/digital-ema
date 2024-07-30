@@ -1,9 +1,9 @@
-import MessageCard from "./MessageCard.cdc"
+import "MessageCard"
 
-pub contract EmaShowcase {
-    pub struct Ema {
-        pub let id: UInt64
-        pub let owner: Address
+access(all) contract EmaShowcase {
+    access(all) struct Ema {
+        access(all) let id: UInt64
+        access(all) let owner: Address
 
         init(id: UInt64, owner: Address) {
             self.id = id
@@ -17,8 +17,8 @@ pub contract EmaShowcase {
     access(account) var paused: Bool
     access(account) var allowedTemplateIds: {UInt64: Bool}
 
-    pub resource Admin {
-        pub fun updateMax(max: Int) {
+    access(all) resource Admin {
+        access(all) fun updateMax(max: Int) {
             EmaShowcase.max = max
             while EmaShowcase.emas.length > EmaShowcase.max {
                 let lastEma = EmaShowcase.emas.removeLast()
@@ -26,30 +26,30 @@ pub contract EmaShowcase {
             }
         }
 
-        pub fun updatePaused(paused: Bool) {
+        access(all) fun updatePaused(paused: Bool) {
             EmaShowcase.paused = paused
         }
 
-        pub fun addAllowedTemplateId(templateId: UInt64) {
+        access(all) fun addAllowedTemplateId(templateId: UInt64) {
             EmaShowcase.allowedTemplateIds[templateId] = true
         }
 
-        pub fun removeAllowedTemplateId(templateId: UInt64) {
+        access(all) fun removeAllowedTemplateId(templateId: UInt64) {
             EmaShowcase.allowedTemplateIds.remove(key: templateId)
         }
 
-        pub fun clearEmas() {
+        access(all) fun clearEmas() {
             EmaShowcase.emas = []
             EmaShowcase.exists = {}
         }
     }
 
-    pub fun addEma(id: UInt64, collectionCapability: Capability<&MessageCard.Collection{MessageCard.CollectionPublic}>) {
+    access(all) fun addEma(id: UInt64, collectionCapability: Capability<&MessageCard.Collection>) {
         pre {
             !EmaShowcase.paused: "Paused"
             !EmaShowcase.exists.containsKey(id): "Already Existing"
-            collectionCapability.borrow()?.borrowMessageCard(id: id) != nil: "Not Found"
-            EmaShowcase.allowedTemplateIds.containsKey(collectionCapability.borrow()!.borrowMessageCard(id: id)!.templateId): "Not Allowed Template"
+            collectionCapability.borrow()?.borrowMessageCard(id) != nil: "Not Found"
+            EmaShowcase.allowedTemplateIds.containsKey(collectionCapability.borrow()!.borrowMessageCard(id)!.templateId): "Not Allowed Template"
         }
         EmaShowcase.emas.insert(at: 0, Ema(id: id, owner: collectionCapability.address))
         EmaShowcase.exists[id] = true
@@ -59,7 +59,7 @@ pub contract EmaShowcase {
         }
     }
 
-    pub fun getEmas(from: Int, upTo: Int): [Ema] {
+    access(all) fun getEmas(from: Int, upTo: Int): [Ema] {
         if from >= EmaShowcase.emas.length {
             return []
         }
@@ -76,6 +76,6 @@ pub contract EmaShowcase {
         self.paused = false
         self.allowedTemplateIds = {}
 
-        self.account.save(<- create Admin(), to: /storage/EmaShowcaseAdmin)
+        self.account.storage.save(<- create Admin(), to: /storage/EmaShowcaseAdmin)
     }
 }

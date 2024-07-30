@@ -1,10 +1,10 @@
-import NonFungibleToken from "../contracts/core/NonFungibleToken.cdc"
-import MessageCard from "../contracts/MessageCard.cdc"
+import "NonFungibleToken"
+import "MessageCard"
 
-pub fun main(address: Address): Int {
+access(all) fun main(address: Address): Int {
     let collectionRef = getAccount(address)
-        .getCapability(MessageCard.CollectionPublicPath)
-        .borrow<&{NonFungibleToken.CollectionPublic}>()
+        .capabilities.get<&{NonFungibleToken.CollectionPublic}>(MessageCard.CollectionPublicPath)
+        .borrow()
         ?? panic("Not Found")
     return collectionRef.getIDs().length
 }

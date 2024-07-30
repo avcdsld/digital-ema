@@ -1,16 +1,14 @@
-import NonFungibleToken from "../contracts/core/NonFungibleToken.cdc"
-import MetadataViews from "../contracts/core/MetadataViews.cdc"
-import MessageCard from "../contracts/MessageCard.cdc"
+import "NonFungibleToken"
+import "MetadataViews"
+import "MessageCard"
 
 transaction {
-    prepare(signer: AuthAccount) {
-        if signer.borrow<&MessageCard.Collection>(from: MessageCard.CollectionStoragePath) != nil {
+    prepare(signer: auth(BorrowValue, SaveValue, IssueStorageCapabilityController, PublishCapability) &Account) {
+        if signer.storage.borrow<&MessageCard.Collection>(from: MessageCard.CollectionStoragePath) != nil {
             return
         }
-        signer.save(<- MessageCard.createEmptyCollection(), to: MessageCard.CollectionStoragePath)
-        signer.link<&MessageCard.Collection{NonFungibleToken.CollectionPublic, MessageCard.CollectionPublic, MetadataViews.ResolverCollection}>(
-            MessageCard.CollectionPublicPath,
-            target: MessageCard.CollectionStoragePath
-        )
+        signer.storage.save(<- MessageCard.createEmptyCollection(nftType: Type<@MessageCard.NFT>()), to: MessageCard.CollectionStoragePath)
+        let cap: Capability = signer.capabilities.storage.issue<&MessageCard.Collection>(MessageCard.CollectionStoragePath)
+        signer.capabilities.publish(cap, at: MessageCard.CollectionPublicPath)
     }
 }

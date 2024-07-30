@@ -1,9 +1,9 @@
-import NonFungibleToken from "../contracts/core/NonFungibleToken.cdc"
-import MessageCard from "../contracts/MessageCard.cdc"
-import MessageCardRenderers from "../contracts/MessageCardRenderers.cdc"
+import "NonFungibleToken"
+import "MessageCard"
+import "MessageCardRenderers"
 
 transaction(templateId: UInt64) {
-    prepare(signer: AuthAccount) {
+    prepare(signer: auth(BorrowValue) &Account) {
 
         let newRenderer = MessageCardRenderers.SvgPartsRenderer(
             svgParts: [
@@ -31,7 +31,7 @@ transaction(templateId: UInt64) {
             extraData: {},
         )
 
-        let templatesRef = signer.borrow<&MessageCard.Templates>(from: MessageCard.TemplatesStoragePath) ?? panic("Not Found")
+        let templatesRef = signer.storage.borrow<auth(MessageCard.BorrowTemplate) &MessageCard.Templates>(from: MessageCard.TemplatesStoragePath) ?? panic("Not Found")
         let templateRef = templatesRef.borrowTemplateRef(templateId: templateId) ?? panic("Not Found")
         templateRef.updateRenderer(renderer: newRenderer)
     }

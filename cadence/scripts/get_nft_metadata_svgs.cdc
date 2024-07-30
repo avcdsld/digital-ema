@@ -1,15 +1,15 @@
-import MetadataViews from "../contracts/core/MetadataViews.cdc"
-import MessageCard from "../contracts/MessageCard.cdc"
+import "MetadataViews"
+import "MessageCard"
 
-pub fun main(address: Address): [String] {
+access(all) fun main(address: Address): [String] {
     var res: [String] = []
     let collection = getAccount(address)
-        .getCapability(MessageCard.CollectionPublicPath)
-        .borrow<&{MessageCard.CollectionPublic}>()
+        .capabilities.get<&MessageCard.Collection>(MessageCard.CollectionPublicPath)
+        .borrow()
     if collection != nil {
         let ids = collection!.getIDs()
         for id in ids {
-            let nft = collection!.borrowMessageCard(id: id)!
+            let nft = collection!.borrowMessageCard(id)!
             let traits = (nft.resolveView(Type<MetadataViews.Traits>())!) as! MetadataViews.Traits
             let svg = traits.traits[1].value as! String
             res.append(svg)

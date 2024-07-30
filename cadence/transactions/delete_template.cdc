@@ -1,10 +1,10 @@
-import NonFungibleToken from "../contracts/core/NonFungibleToken.cdc"
-import MessageCard from "../contracts/MessageCard.cdc"
-import MessageCardRenderers from "../contracts/MessageCardRenderers.cdc"
+import "NonFungibleToken"
+import "MessageCard"
+import "MessageCardRenderers"
 
 transaction(templateId: UInt64) {
-    prepare(signer: AuthAccount) {
-        let templatesRef = signer.borrow<&MessageCard.Templates>(from: MessageCard.TemplatesStoragePath) ?? panic("Not Found")
+    prepare(signer: auth(BorrowValue) &Account) {
+        let templatesRef = signer.storage.borrow<auth(MessageCard.DeleteTemplate) &MessageCard.Templates>(from: MessageCard.TemplatesStoragePath) ?? panic("Not Found")
         templatesRef.deleteTemplate(templateId: templateId)
     }
 }

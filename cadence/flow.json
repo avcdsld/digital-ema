@@ -3,8 +3,30 @@
     "EmaShowcase": "./contracts/EmaShowcase.cdc",
     "MessageCard": "./contracts/MessageCard.cdc",
     "MessageCardRenderers": "./contracts/MessageCardRenderers.cdc",
-    "MetadataViews": "./contracts/core/MetadataViews.cdc",
-    "NonFungibleToken": "./contracts/core/NonFungibleToken.cdc"
+    "MetadataViews": {
+			"source": "./contracts/core/MetadataViews.cdc",
+			"aliases": {
+				"emulator": "f8d6e0586b0a20c7",
+				"mainnet": "1d7e57aa55817448",
+				"testnet": "631e88ae7f1d7c20"
+			}
+		},
+		"ViewResolver": {
+			"source": "./contracts/core/ViewResolver.cdc",
+			"aliases": {
+				"emulator": "f8d6e0586b0a20c7",
+				"mainnet": "1d7e57aa55817448",
+				"testnet": "631e88ae7f1d7c20"
+			}
+		},
+		"NonFungibleToken": {
+			"source": "./contracts/core/NonFungibleToken.cdc",
+			"aliases": {
+				"emulator": "f8d6e0586b0a20c7",
+				"mainnet": "1d7e57aa55817448",
+				"testnet": "631e88ae7f1d7c20"
+			}
+		}
   },
   "networks": {
     "emulator": "127.0.0.1:3569",
@@ -18,29 +40,67 @@
       "key": "21c12bd5fdb67edae934dfebe0af338b6b8c91203fd3174cc67b2e35b85dbb9d"
     },
     "emulator-account2": {
-      "address": "01cf0e2f2f715450",
+      "address": "179b6b1cb6755e31",
       "key": "0c32947083636d373889fa4250c3dcf9d75e6c4c0a153b281d3817b69e6c5fdf"
     },
     "emulator-account3": {
-      "address": "179b6b1cb6755e31",
+      "address": "f3fcd2c1a78f5eee",
       "key": "6980a565c3d217cf98c13b48b4833ee138ffb3d14461b4f9ee3fb8525ea8c80d"
     },
-    "testadmin": {
-      "fromFile": "testadmin.private.json"
+    "testnet-account": {
+      "address": "26469acda7819263",
+      "key": {
+        "index": 3,
+        "signatureAlgorithm": "ECDSA_secp256k1",
+        "hashAlgorithm": "SHA3_256",
+        "type": "file",
+        "location": "./testnet-account.key"
+      }
+    },
+    "mainnet-account": {
+      "address": "f38fadaba79009cc",
+      "key": {
+        "index": 3,
+        "signatureAlgorithm": "ECDSA_secp256k1",
+        "hashAlgorithm": "SHA3_256",
+        "type": "file",
+        "location": "./mainnet-account.key"
+      }
+    },
+    "mainnet-account2": {
+      "address": "67fb6951287a2908",
+      "key": {
+        "index": 3,
+        "signatureAlgorithm": "ECDSA_secp256k1",
+        "hashAlgorithm": "SHA3_256",
+        "type": "file",
+        "location": "./mainnet-account2.key"
+      }
     }
   },
   "deployments": {
     "emulator": {
       "emulator-account": [
-        "NonFungibleToken",
-        "MetadataViews",
         "MessageCard",
         "MessageCardRenderers",
         "EmaShowcase"
       ]
     },
     "testnet": {
-      "testadmin": ["MessageCard", "MessageCardRenderers", "EmaShowcase"]
+      "testnet-account": [
+        "MessageCard",
+        "MessageCardRenderers",
+        "EmaShowcase"
+      ]
+    },
+    "mainnet": {
+      "mainnet-account": [
+        "MessageCard",
+        "MessageCardRenderers"
+      ],
+      "mainnet-account2": [
+        "EmaShowcase"
+      ]
     }
   }
 }

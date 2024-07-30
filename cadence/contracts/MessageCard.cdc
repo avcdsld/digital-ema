@@ -7,38 +7,38 @@
 //                                    /                                         
 //                                (_ /                                          
 
-import NonFungibleToken from "./core/NonFungibleToken.cdc"
-import MetadataViews from "./core/MetadataViews.cdc"
+import "NonFungibleToken"
+import "ViewResolver"
+import "MetadataViews"
 
-pub contract MessageCard: NonFungibleToken {
-    pub let CollectionPublicPath: PublicPath
-    pub let CollectionPrivatePath: PrivatePath
-    pub let CollectionStoragePath: StoragePath
-    pub let TemplatesPublicPath: PublicPath
-    pub let TemplatesPrivatePath: PrivatePath
-    pub let TemplatesStoragePath: StoragePath
-    pub var totalSupply: UInt64
-    pub var totalTemplates: UInt64
+access(all) contract MessageCard: NonFungibleToken {
+    access(all) let CollectionPublicPath: PublicPath
+    access(all) let CollectionStoragePath: StoragePath
+    access(all) let TemplatesPublicPath: PublicPath
+    access(all) let TemplatesStoragePath: StoragePath
+    access(all) var totalSupply: UInt64
+    access(all) var totalTemplates: UInt64
     access(account) var thumbnailBaseUrl: String
     access(account) var description: String
     access(account) var royalties: MetadataViews.Royalties?
     access(account) var externalURLBase: String?
     access(account) var nftCollectionDisplay: MetadataViews.NFTCollectionDisplay?
 
-    pub event ContractInitialized()
-    pub event Withdraw(id: UInt64, from: Address?)
-    pub event Deposit(id: UInt64, to: Address?)
+    access(all) event Minted(id: UInt64, templateId: UInt64)
+    access(all) event UsedTemplateChanged(id: UInt64, templateId: UInt64)
+    access(all) event TemplateCreated(templateId: UInt64, creator: Address, name: String, description: String)
 
-    pub event Minted(id: UInt64, templateId: UInt64)
-    pub event Destroyed(id: UInt64)
-    pub event UsedTemplateChanged(id: UInt64, templateId: UInt64)
-    pub event TemplateCreated(templateId: UInt64, creator: Address, name: String, description: String)
-    pub event TemplateDestroyed(templateId: UInt64, creator: Address, name: String)
+    access(all) entitlement UpdateParams
+    access(all) entitlement UpdateTemplate
+    access(all) entitlement CreateTemplate
+    access(all) entitlement DeleteTemplate
+    access(all) entitlement BorrowTemplate
+    access(all) entitlement UpdateRenderer
 
-    pub struct RenderResult {
-        pub var dataType: String
-        pub var data: AnyStruct
-        pub var extraData: {String: AnyStruct}
+    access(all) struct RenderResult {
+        access(all) var dataType: String
+        access(all) var data: AnyStruct
+        access(all) var extraData: {String: AnyStruct}
 
         init(
             dataType: String,
@@ -51,33 +51,31 @@ pub contract MessageCard: NonFungibleToken {
         }
     }
 
-    pub struct interface IRenderer {
-        pub fun render(params: {String: AnyStruct}): RenderResult
+    access(all) struct interface IRenderer {
+        access(all) fun render(params: {String: AnyStruct}): RenderResult
     }
 
-    pub resource NFT: NonFungibleToken.INFT, MetadataViews.Resolver {
-        pub let id: UInt64
-        pub var params: {String: AnyStruct}
-        pub var templatesCapability: Capability<&Templates{TemplatesPublic}>
-        pub var templateId: UInt64
+    access(all) resource NFT: NonFungibleToken.NFT {
+        access(all) let id: UInt64
+        access(all) var params: {String: AnyStruct}
+        access(all) var templateId: UInt64
+        access(self) var templatesCapability: Capability<&Templates>
 
         access(account) fun updateParams(params: {String: AnyStruct}) {
             self.params = params
         }
 
-        access(account) fun updateTemplate(templatesCapability: Capability<&Templates{TemplatesPublic}>, templateId: UInt64) {
+        access(account) fun updateTemplate(templatesCapability: Capability<&Templates>, templateId: UInt64) {
             pre {
                 templateId != self.templateId: "Same templateId"
-            }
-            post {
-                self.isValidTemplate(): "Invalid template"
             }
             self.templatesCapability = templatesCapability
             self.templateId = templateId
             emit UsedTemplateChanged(id: self.id, templateId: self.templateId)
+            assert(self.isValidTemplate(), message: "Invalid template")
         }
 
-        pub fun isValidTemplate(): Bool {
+        access(all) fun isValidTemplate(): Bool {
             if let templates = self.templatesCapability.borrow() {
                 if let template = templates.borrowPublicTemplateRef(templateId: self.templateId) {
                     return true
@@ -86,7 +84,7 @@ pub contract MessageCard: NonFungibleToken {
             return false
         }
 
-        pub fun getRenderer(): {IRenderer}? {
+        access(all) fun getRenderer(): {IRenderer}? {
             if let templates = self.templatesCapability.borrow() {
                 if let template = templates.borrowPublicTemplateRef(templateId: self.templateId) {
                     return template.getRenderer()
@@ -95,27 +93,24 @@ pub contract MessageCard: NonFungibleToken {
             return nil
         }
 
-        pub fun getViews(): [Type] {
-            let views = [
+        access(all) fun createEmptyCollection(): @{NonFungibleToken.Collection} {
+            return <- MessageCard.createEmptyCollection(nftType: Type<@MessageCard.NFT>())
+        }
+
+        access(all) view fun getViews(): [Type] {
+            return [
                 Type<MetadataViews.Display>(),
                 Type<MetadataViews.NFTCollectionData>(),
                 Type<MetadataViews.NFTCollectionDisplay>(),
                 Type<MetadataViews.Serial>(),
-                Type<MetadataViews.Traits>()
+                Type<MetadataViews.Traits>(),
+                Type<MetadataViews.Royalties>(),
+                Type<MetadataViews.ExternalURL>(),
+                Type<MetadataViews.NFTCollectionDisplay>()
             ]
-            if MessageCard.royalties != nil {
-                views.append(Type<MetadataViews.Royalties>())
-            }
-            if MessageCard.externalURLBase != nil {
-                views.append(Type<MetadataViews.ExternalURL>())
-            }
-            if MessageCard.nftCollectionDisplay != nil {
-                views.append(Type<MetadataViews.NFTCollectionDisplay>())
-            }
-            return views
         }
 
-        pub fun resolveView(_ view: Type): AnyStruct? {
+        access(all) fun resolveView(_ view: Type): AnyStruct? {
             switch view {
                 case Type<MetadataViews.Display>():
                     return MetadataViews.Display(
@@ -141,19 +136,9 @@ pub contract MessageCard: NonFungibleToken {
                     }
                     return nil
                 case Type<MetadataViews.NFTCollectionData>():
-                    return MetadataViews.NFTCollectionData(
-                        storagePath: MessageCard.CollectionStoragePath,
-                        publicPath: MessageCard.CollectionPublicPath,
-                        providerPath: MessageCard.CollectionPrivatePath,
-                        publicCollection: Type<&Collection{CollectionPublic}>(),
-                        publicLinkedType: Type<&Collection{CollectionPublic, NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver, MetadataViews.ResolverCollection}>(),
-                        providerLinkedType: Type<&Collection{CollectionPublic, NonFungibleToken.CollectionPublic, NonFungibleToken.Provider, MetadataViews.ResolverCollection}>(),
-                        createEmptyCollectionFunction: (fun (): @NonFungibleToken.Collection {
-                            return <- MessageCard.createEmptyCollection()
-                        })
-                    )
+                    return MessageCard.resolveContractView(resourceType: Type<@MessageCard.NFT>(), viewType: Type<MetadataViews.NFTCollectionData>())
                 case Type<MetadataViews.NFTCollectionDisplay>():
-                    return MessageCard.nftCollectionDisplay
+                    return MessageCard.resolveContractView(resourceType: Type<@MessageCard.NFT>(), viewType: Type<MetadataViews.NFTCollectionDisplay>())
                 case Type<MetadataViews.Serial>():
                     return MetadataViews.Serial(self.id)
             }
@@ -162,107 +147,116 @@ pub contract MessageCard: NonFungibleToken {
 
         init(
             params: {String: AnyStruct},
-            templatesCapability: Capability<&Templates{TemplatesPublic}>,
+            templatesCapability: Capability<&Templates>,
             templateId: UInt64,
         ) {
-            post {
-                self.isValidTemplate(): "Invalid template"
-            }
             MessageCard.totalSupply = MessageCard.totalSupply + 1
             self.id = MessageCard.totalSupply
             self.params = params
             self.templatesCapability = templatesCapability
             self.templateId = templateId
             emit Minted(id: self.id, templateId: templateId)
-        }
-
-        destroy() {
-            emit Destroyed(id: self.id)
+            assert(self.isValidTemplate(), message: "Invalid template")
         }
     }
 
-    pub resource interface CollectionPublic {
-        pub fun deposit(token: @NonFungibleToken.NFT)
-        pub fun getIDs(): [UInt64]
-        pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT
-        pub fun borrowMessageCard(id: UInt64): &MessageCard.NFT? {
+    access(all) resource interface CollectionPublic {
+        access(all) fun deposit(token: @{NonFungibleToken.NFT})
+        access(all) view fun getIDs(): [UInt64]
+        access(all) view fun borrowNFT(_ id: UInt64): &{NonFungibleToken.NFT}?
+        access(all) view fun borrowMessageCard(_ id: UInt64): &MessageCard.NFT? {
             post {
                 (result == nil) || (result?.id == id): "Cannot borrow MessageCard reference"
             }
         }
     }
 
-    pub resource Collection: CollectionPublic, NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection {
-        pub var ownedNFTs: @{UInt64: NonFungibleToken.NFT}
+    access(all) resource Collection: CollectionPublic, NonFungibleToken.Collection {
+        access(all) var ownedNFTs: @{UInt64: {NonFungibleToken.NFT}}
 
         init () {
             self.ownedNFTs <- {}
         }
 
-        pub fun withdraw(withdrawID: UInt64): @NonFungibleToken.NFT {
+        access(all) view fun getSupportedNFTTypes(): {Type: Bool} {
+            let supportedTypes: {Type: Bool} = {}
+            supportedTypes[Type<@MessageCard.NFT>()] = true
+            return supportedTypes
+        }
+
+        access(all) view fun isSupportedNFTType(type: Type): Bool {
+            return type == Type<@MessageCard.NFT>()
+        }
+
+        access(NonFungibleToken.Withdraw) fun withdraw(withdrawID: UInt64): @{NonFungibleToken.NFT} {
             let token <- self.ownedNFTs.remove(key: withdrawID) ?? panic("Missing NFT")
-            emit Withdraw(id: token.id, from: self.owner?.address)
             return <- token
         }
 
-        pub fun deposit(token: @NonFungibleToken.NFT) {
+        access(all) fun deposit(token: @{NonFungibleToken.NFT}) {
             let token <- token as! @MessageCard.NFT
             let id: UInt64 = token.id
             self.ownedNFTs[id] <-! token
-            emit Deposit(id: id, to: self.owner?.address)
         }
 
-        pub fun getIDs(): [UInt64] {
+        access(all) view fun getIDs(): [UInt64] {
             return self.ownedNFTs.keys
         }
 
-        pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT {
-            return (&self.ownedNFTs[id] as &NonFungibleToken.NFT?)!
+        access(all) view fun getLength(): Int {
+            return self.ownedNFTs.length
         }
 
-        pub fun borrowMessageCard(id: UInt64): &MessageCard.NFT? {
+        access(all) view fun borrowNFT(_ id: UInt64): &{NonFungibleToken.NFT}? {
+            return &self.ownedNFTs[id] as &{NonFungibleToken.NFT}?
+        }
+
+        access(all) view fun borrowMessageCard(_ id: UInt64): &MessageCard.NFT? {
             if self.ownedNFTs[id] != nil {
-                return (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)! as! &MessageCard.NFT
+                return (&self.ownedNFTs[id] as &{NonFungibleToken.NFT}?) as! &MessageCard.NFT?
             }
             return nil
         }
 
-        pub fun borrowViewResolver(id: UInt64): &AnyResource{MetadataViews.Resolver} {
-            return (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)! as! &MessageCard.NFT
+        access(all) view fun borrowViewResolver(id: UInt64): &{ViewResolver.Resolver}? {
+            if let nft = &self.ownedNFTs[id] as &{NonFungibleToken.NFT}? {
+                return nft as &{ViewResolver.Resolver}
+            }
+            return nil
         }
 
-        pub fun updateParams(id: UInt64, params: {String: AnyStruct}) {
-            let nft = (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)! as! &MessageCard.NFT
+        access(UpdateParams) fun updateParams(id: UInt64, params: {String: AnyStruct}) {
+            let nft = (&self.ownedNFTs[id] as &{NonFungibleToken.NFT}?)! as! &MessageCard.NFT
             nft.updateParams(params: params)
         }
 
-        pub fun updateTemplate(id: UInt64, templatesCapability: Capability<&Templates{TemplatesPublic}>, templateId: UInt64) {
-            let nft = (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)! as! &MessageCard.NFT
+        access(UpdateTemplate) fun updateTemplate(id: UInt64, templatesCapability: Capability<&Templates>, templateId: UInt64) {
+            let nft = (&self.ownedNFTs[id] as &{NonFungibleToken.NFT}?)! as! &MessageCard.NFT
             nft.updateTemplate(templatesCapability: templatesCapability, templateId: templateId)
         }
 
-        destroy() {
-            destroy self.ownedNFTs
+        access(all) fun createEmptyCollection(): @{NonFungibleToken.Collection} {
+            return <- MessageCard.createEmptyCollection(nftType: Type<@MessageCard.NFT>())
         }
     }
 
-    pub resource interface TemplatePublic {
-        pub let templateId: UInt64
-        pub fun getRenderer(): {IRenderer}
+    access(all) resource interface TemplatePublic {
+        access(all) let templateId: UInt64
+        access(all) fun getRenderer(): {IRenderer}
     }
 
-    pub resource Template: TemplatePublic {
-        pub let templateId: UInt64
-        pub let creator: Address
-        pub let name: String
-        pub let description: String
-        pub var renderer: {IRenderer}
+    access(all) resource Template: TemplatePublic {
+        access(all) let templateId: UInt64
+        access(all) let creator: Address
+        access(all) let name: String
+        access(all) let description: String
+        access(all) var renderer: {IRenderer}
 
-        pub fun getRenderer(): {IRenderer} {
+        access(all) fun getRenderer(): {IRenderer} {
             return self.renderer
         }
 
-        pub fun updateRenderer(renderer: {IRenderer}) {
+        access(UpdateRenderer) fun updateRenderer(renderer: {IRenderer}) {
             self.renderer = renderer
         }
 
@@ -280,22 +274,17 @@ pub contract MessageCard: NonFungibleToken {
             self.renderer = renderer
             emit TemplateCreated(templateId: self.templateId, creator: self.creator, name: self.name, description: self.description)
         }
-
-        destroy() {
-            emit TemplateDestroyed(templateId: self.templateId, creator: self.creator, name: self.name)
-        }
     }
 
-    pub resource interface TemplatesPublic {
-        pub fun getIDs(): [UInt64]
-        pub fun borrowPublicTemplateRef(templateId: UInt64): &Template{TemplatePublic}?
-        access(account) fun borrowTemplatesRef(): &Templates
+    access(all) resource interface TemplatesPublic {
+        access(all) fun getIDs(): [UInt64]
+        access(all) fun borrowPublicTemplateRef(templateId: UInt64): &{TemplatePublic}?
     }
 
-    pub resource Templates: TemplatesPublic {
+    access(all) resource Templates: TemplatesPublic {
         access(account) var templates: @{UInt64: Template}
 
-        pub fun createTemplate(
+        access(CreateTemplate) fun createTemplate(
             name: String, 
             description: String,
             renderer: {IRenderer},
@@ -311,70 +300,87 @@ pub contract MessageCard: NonFungibleToken {
             return templateId
         }
 
-        pub fun deleteTemplate(templateId: UInt64) {
+        access(DeleteTemplate) fun deleteTemplate(templateId: UInt64) {
             let template <- self.templates.remove(key: templateId)
             assert(template != nil, message: "Not Found")
             destroy template
         }
 
-        pub fun getIDs(): [UInt64] {
+        access(all) fun getIDs(): [UInt64] {
             return self.templates.keys
         }
 
-        pub fun borrowPublicTemplateRef(templateId: UInt64): &Template{TemplatePublic}? {
-            return &self.templates[templateId] as &Template{TemplatePublic}?
+        access(all) fun borrowPublicTemplateRef(templateId: UInt64): &{TemplatePublic}? {
+            return &self.templates[templateId]
         }
 
-        access(account) fun borrowTemplatesRef(): &Templates {
-            return &self as &Templates
-        }
-
-        pub fun borrowTemplateRef(templateId: UInt64): &Template? {
-            return &self.templates[templateId] as &Template?
+        access(BorrowTemplate) fun borrowTemplateRef(templateId: UInt64): auth(UpdateRenderer) &Template? {
+            return &self.templates[templateId]
         }
 
         init() {
             self.templates <- {}
         }
-
-        destroy() {
-            destroy self.templates
-        }
     }
 
-    pub resource Maintainer {
-        pub fun setThumbnailBaseUrl(url: String) {
+    access(all) resource Maintainer {
+        access(all) fun setThumbnailBaseUrl(url: String) {
             MessageCard.thumbnailBaseUrl = url
         }
 
-        pub fun setDescription(description: String) {
+        access(all) fun setDescription(description: String) {
             MessageCard.description = description
         }
 
-        pub fun setRoyalties(royalties: MetadataViews.Royalties) {
+        access(all) fun setRoyalties(royalties: MetadataViews.Royalties) {
             MessageCard.royalties = royalties
         }
 
-        pub fun setExternalURLBase(externalURLBase: String) {
+        access(all) fun setExternalURLBase(externalURLBase: String) {
             MessageCard.externalURLBase = externalURLBase
         }
 
-        pub fun setNFTCollectionDisplay(nftCollectionDisplay: MetadataViews.NFTCollectionDisplay) {
+        access(all) fun setNFTCollectionDisplay(nftCollectionDisplay: MetadataViews.NFTCollectionDisplay) {
             MessageCard.nftCollectionDisplay = nftCollectionDisplay
         }
     }
 
-    pub fun createEmptyCollection(): @NonFungibleToken.Collection {
+    access(all) fun createEmptyCollection(nftType: Type): @{NonFungibleToken.Collection} {
         return <- create Collection()
     }
 
-    pub fun createEmptyTemplateCollection(): @Templates {
+    access(all) fun createEmptyTemplateCollection(): @Templates {
         return <- create Templates()
     }
 
-    pub fun mint(
+    access(all) view fun getContractViews(resourceType: Type?): [Type] {
+        return [
+            Type<MetadataViews.NFTCollectionData>(),
+            Type<MetadataViews.NFTCollectionDisplay>()
+        ]
+    }
+
+    access(all) view fun resolveContractView(resourceType: Type?, viewType: Type): AnyStruct? {
+        switch viewType {
+            case Type<MetadataViews.NFTCollectionData>():
+                return MetadataViews.NFTCollectionData(
+                    storagePath: MessageCard.CollectionStoragePath,
+                    publicPath: MessageCard.CollectionPublicPath,
+                    publicCollection: Type<&MessageCard.Collection>(),
+                    publicLinkedType: Type<&MessageCard.Collection>(),
+                    createEmptyCollectionFunction: (fun(): @{NonFungibleToken.Collection} {
+                        return <- MessageCard.createEmptyCollection(nftType: Type<@MessageCard.NFT>())
+                    })
+                )
+            case Type<MetadataViews.NFTCollectionDisplay>():
+                return MessageCard.nftCollectionDisplay
+        }
+        return nil
+    }
+
+    access(all) fun mint(
         params: {String: AnyStruct},
-        templatesCapability: Capability<&Templates{TemplatesPublic}>,
+        templatesCapability: Capability<&Templates>,
         templateId: UInt64,
     ): @NFT {
         return <- create NFT(
@@ -386,10 +392,8 @@ pub contract MessageCard: NonFungibleToken {
 
     init() {
         self.CollectionPublicPath = /public/MessageCardCollectionPublicPath
-        self.CollectionPrivatePath = /private/MessageCardCollectionPrivatePath
         self.CollectionStoragePath = /storage/MessageCardCollectionStoragePath
         self.TemplatesPublicPath = /public/MessageCardTemplatesPublicPath
-        self.TemplatesPrivatePath = /private/MessageCardTemplatesPrivatePath
         self.TemplatesStoragePath = /storage/MessageCardTemplatesStoragePath
         self.totalSupply = 0
         self.totalTemplates = 0
@@ -399,10 +403,9 @@ pub contract MessageCard: NonFungibleToken {
         self.externalURLBase = nil
         self.nftCollectionDisplay = nil
 
-        self.account.save(<- create Maintainer(), to: /storage/MessageCardMaintainer)
-        self.account.save(<- create Collection(), to: self.CollectionStoragePath)
-        self.account.link<&MessageCard.Collection{NonFungibleToken.CollectionPublic, MessageCard.CollectionPublic, MetadataViews.ResolverCollection}>(self.CollectionPublicPath, target: self.CollectionStoragePath)
-
-        emit ContractInitialized()
+        self.account.storage.save(<- create Maintainer(), to: /storage/MessageCardMaintainer)
+        self.account.storage.save(<- create Collection(), to: self.CollectionStoragePath)
+        let cap: Capability = self.account.capabilities.storage.issue<&MessageCard.Collection>(self.CollectionStoragePath)
+        self.account.capabilities.publish(cap, at: self.CollectionPublicPath)
     }
 }

@@ -1,9 +1,9 @@
-import MetadataViews from "../contracts/core/MetadataViews.cdc"
-import MessageCard from "../contracts/MessageCard.cdc"
+import "MetadataViews"
+import "MessageCard"
 
-pub struct NFT {
-    pub let display: MetadataViews.Display
-    pub let traits: MetadataViews.Traits
+access(all) struct NFT {
+    access(all) let display: MetadataViews.Display
+    access(all) let traits: MetadataViews.Traits
 
     init(
         display: MetadataViews.Display,
@@ -14,13 +14,13 @@ pub struct NFT {
     }
 }
 
-pub fun main(address: Address, id: UInt64): NFT {
+access(all) fun main(address: Address, id: UInt64): NFT {
     let collection = getAccount(address)
-        .getCapability(MessageCard.CollectionPublicPath)
-        .borrow<&{MessageCard.CollectionPublic}>()
+        .capabilities.get<&MessageCard.Collection>(MessageCard.CollectionPublicPath)
+        .borrow()
         ?? panic("Not Found")
 
-    let nft = collection.borrowMessageCard(id: id)!
+    let nft = collection.borrowMessageCard(id)!
     let display = nft.resolveView(Type<MetadataViews.Display>())!
     let traits = nft.resolveView(Type<MetadataViews.Traits>())!
 

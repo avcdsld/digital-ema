@@ -1,15 +1,13 @@
-import NonFungibleToken from "../contracts/core/NonFungibleToken.cdc"
-import MessageCard from "../contracts/MessageCard.cdc"
-import MessageCardRenderers from "../contracts/MessageCardRenderers.cdc"
+import "NonFungibleToken"
+import "MessageCard"
+import "MessageCardRenderers"
 
 transaction {
-    prepare(signer: AuthAccount) {
-        if signer.borrow<&MessageCard.Templates>(from: MessageCard.TemplatesStoragePath) == nil {
-            signer.save(<- MessageCard.createEmptyTemplateCollection(), to: MessageCard.TemplatesStoragePath)
-            signer.link<&MessageCard.Templates{MessageCard.TemplatesPublic}>(
-                MessageCard.TemplatesPublicPath,
-                target: MessageCard.TemplatesStoragePath
-            )
+    prepare(signer: auth(BorrowValue, SaveValue, IssueStorageCapabilityController, PublishCapability) &Account) {
+        if signer.storage.borrow<&MessageCard.Templates>(from: MessageCard.TemplatesStoragePath) == nil {
+            signer.storage.save(<- MessageCard.createEmptyTemplateCollection(), to: MessageCard.TemplatesStoragePath)
+            let cap: Capability = signer.capabilities.storage.issue<&MessageCard.Templates>(MessageCard.TemplatesStoragePath)
+            signer.capabilities.publish(cap, at: MessageCard.TemplatesPublicPath)
         }
 
         let renderer = MessageCardRenderers.SvgPartsRenderer(
@@ -46,7 +44,7 @@ transaction {
             extraData: {},
         )
 
-        let templatesRef = signer.borrow<&MessageCard.Templates>(from: MessageCard.TemplatesStoragePath) ?? panic("Not Found")
+        let templatesRef = signer.storage.borrow<&MessageCard.Templates>(from: MessageCard.TemplatesStoragePath) ?? panic("Not Found")
         templatesRef.createTemplate(
             name: "Digital Ema - Origami Crane",
             description: "Card design for the Digital Ema project.",

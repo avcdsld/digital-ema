@@ -1,12 +1,12 @@
-import MessageCard from "./MessageCard.cdc"
+import "MessageCard"
 
-pub contract MessageCardRenderers {
-    pub struct SvgPartsRenderer: MessageCard.IRenderer {
-        pub let svgParts: [String]
-        pub let replaceKeyAndParamKeys: {String: String}
-        pub let extraData: {String: AnyStruct}
+access(all) contract MessageCardRenderers {
+    access(all) struct SvgPartsRenderer: MessageCard.IRenderer {
+        access(all) let svgParts: [String]
+        access(all) let replaceKeyAndParamKeys: {String: String}
+        access(all) let extraData: {String: AnyStruct}
 
-        pub fun render(params: {String: AnyStruct}): MessageCard.RenderResult {
+        access(all) fun render(params: {String: AnyStruct}): MessageCard.RenderResult {
             return MessageCard.RenderResult(
                 dataType: "svg",
                 data: self.generateSvg(params: params),
@@ -14,7 +14,7 @@ pub contract MessageCardRenderers {
             )
         }
 
-        pub fun generateSvg(params: {String: AnyStruct}): String {
+        access(all) fun generateSvg(params: {String: AnyStruct}): String {
             var svg = ""
             for svgPart in self.svgParts {
                 let paramKey = self.replaceKeyAndParamKeys[svgPart]
