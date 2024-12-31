@@ -39,11 +39,10 @@ flow migrate is-validated EmaShowcase --network=mainnet
 
 ```sh
 flow transactions send ./transactions/create_template_snake.cdc --network testnet --signer testnet-account
-flow transactions send ./transactions/add_allowed_template.cdc 6 --network testnet --signer testnet-account
+flow transactions send ./transactions/add_allowed_template.cdc 8 --network testnet --signer testnet-account
 
 flow transactions send ./transactions/create_template_snake.cdc --network mainnet --signer mainnet-account
 # 間違えて id:6 と id:7 を別アカウントに登録してしまった
 flow transactions send ./transactions/create_template_snake.cdc --network mainnet --signer mainnet-account2
-flow transactions send ./transactions/add_allowed_template.cdc 6 --network mainnet --signer mainnet-account2
-
+flow transactions send ./transactions/add_allowed_template.cdc 8 --network mainnet --signer mainnet-account2
 ```
