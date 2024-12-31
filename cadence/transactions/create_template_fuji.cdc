@@ -41,7 +41,7 @@ transaction {
             extraData: {},
         )
 
-        let templatesRef = signer.storage.borrow<&MessageCard.Templates>(from: MessageCard.TemplatesStoragePath) ?? panic("Not Found")
+        let templatesRef = signer.storage.borrow<auth(MessageCard.CreateTemplate) &MessageCard.Templates>(from: MessageCard.TemplatesStoragePath) ?? panic("Not Found")
         templatesRef.createTemplate(
             name: "Digital Ema - Fuji",
             description: "Card design for the Digital Ema project.",
