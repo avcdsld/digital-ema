@@ -82,15 +82,15 @@ export const viewEmas = async (address) => {
 import MetadataViews from ${nonFungibleTokenAddress}
 import MessageCard from ${nftAddress}
 
-pub fun main(address: Address): {UInt64: String} {
+access(all) fun main(address: Address): {UInt64: String} {
     var res: {UInt64: String} = {}
     let collection = getAccount(address)
-        .getCapability(MessageCard.CollectionPublicPath)
-        .borrow<&{MessageCard.CollectionPublic}>()
+        .capabilities.get<&MessageCard.Collection>(MessageCard.CollectionPublicPath)
+        .borrow()
     if collection != nil {
         let ids = collection!.getIDs()
         for id in ids {
-            let nft = collection!.borrowMessageCard(id: id)!
+            let nft = collection!.borrowMessageCard(id)!
             let traits = (nft.resolveView(Type<MetadataViews.Traits>())!) as! MetadataViews.Traits
             let svg = traits.traits[1].value as! String
             res[id] = svg
@@ -120,17 +120,17 @@ import MetadataViews from ${nonFungibleTokenAddress}
 import MessageCard from ${nftAddress}
 import EmaShowcase from ${showcaseAddress}
 
-pub fun main(from: Int, upTo: Int): [String] {
+access(all) fun main(from: Int, upTo: Int): [String] {
     var res: [String] = []
 
     let emas = EmaShowcase.getEmas(from: from, upTo: upTo)
     for ema in emas {
         let collection = getAccount(ema.owner)
-            .getCapability(MessageCard.CollectionPublicPath)
-            .borrow<&{MessageCard.CollectionPublic}>()
+            .capabilities.get<&MessageCard.Collection>(MessageCard.CollectionPublicPath)
+            .borrow()
         
         if collection != nil {
-            let nft = collection!.borrowMessageCard(id: ema.id)!
+            let nft = collection!.borrowMessageCard(ema.id)!
             let traits = (nft.resolveView(Type<MetadataViews.Traits>())!) as! MetadataViews.Traits
             let svg = traits.traits[1].value as! String
             res.append(svg)
@@ -290,22 +290,20 @@ transaction(
     templateCreator: Address,
     templateId: UInt64
 ) {
-    prepare(signer: AuthAccount) {
-        if signer.borrow<&MessageCard.Collection>(from: MessageCard.CollectionStoragePath) == nil {
-            signer.save(<- MessageCard.createEmptyCollection(), to: MessageCard.CollectionStoragePath)
-            signer.link<&MessageCard.Collection{NonFungibleToken.CollectionPublic, MessageCard.CollectionPublic, MetadataViews.ResolverCollection}>(
-                MessageCard.CollectionPublicPath,
-                target: MessageCard.CollectionStoragePath
-            )
+    prepare(signer: auth(BorrowValue, SaveValue, IssueStorageCapabilityController, PublishCapability) &Account) {
+        if signer.storage.borrow<&MessageCard.Collection>(from: MessageCard.CollectionStoragePath) == nil {
+            signer.storage.save(<- MessageCard.createEmptyCollection(nftType: Type<@MessageCard.NFT>()), to: MessageCard.CollectionStoragePath)
+            let cap: Capability = signer.capabilities.storage.issue<&MessageCard.Collection>(MessageCard.CollectionStoragePath)
+            signer.capabilities.publish(cap, at: MessageCard.CollectionPublicPath)
         }
 
-        let templatesCapability = getAccount(templateCreator).getCapability<&MessageCard.Templates{MessageCard.TemplatesPublic}>(MessageCard.TemplatesPublicPath)
+        let templatesCapability = getAccount(templateCreator).capabilities.get<&MessageCard.Templates>(MessageCard.TemplatesPublicPath)
         let nft <- MessageCard.mint(params: params, templatesCapability: templatesCapability, templateId: templateId)
         let id = nft.id
-        let collectionRef = signer.borrow<&MessageCard.Collection>(from: MessageCard.CollectionStoragePath) ?? panic("Not Found")
+        let collectionRef = signer.storage.borrow<&MessageCard.Collection>(from: MessageCard.CollectionStoragePath) ?? panic("Not Found")
         collectionRef.deposit(token: <- nft)
 
-        let collectionCapability = signer.getCapability<&MessageCard.Collection{MessageCard.CollectionPublic}>(MessageCard.CollectionPublicPath)
+        let collectionCapability = signer.capabilities.get<&MessageCard.Collection>(MessageCard.CollectionPublicPath)
         EmaShowcase.addEma(id: id, collectionCapability: collectionCapability)
     }
 }`;
