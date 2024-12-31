@@ -151,8 +151,11 @@ const Create = () => {
             <Label mr={2}>
               <Radio name="templateName" value="dappy" onChange={handleRadioChange} defaultChecked={true} />Dappy
             </Label>
-            <Label mr={2}>
+            {/* <Label mr={2}>
               <Radio name="templateName" value="dragon" onChange={handleRadioChange} />辰
+            </Label> */}
+            <Label mr={2}>
+              <Radio name="templateName" value="snake" onChange={handleRadioChange} />巳
             </Label>
             <Label mr={2}>
               <Radio name="templateName" value="fuji" onChange={handleRadioChange} />富士

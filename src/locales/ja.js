@@ -1,8 +1,8 @@
 export default {
     DIGITAL_EMA: "デジタル絵馬",
-    LETS_MAKE_EMA: "2024年の願い事を書いて絵馬をつくりましょう！",
+    LETS_MAKE_EMA: "2025年の願い事を書いて絵馬をつくりましょう！",
     BUTTON_GETTING_STARTED: "絵馬をつくる",
-    WRITE_WISHES_FOR_NEW_YEAR: "2024年の願い事を書こう",
+    WRITE_WISHES_FOR_NEW_YEAR: "2025年の願い事を書こう",
     WRITE_WISHES_DESCRIPTION: "この願いはブロックチェーン上に刻まれて、デジタルな空間に残ります。心して臨んでください！",
     WISHES_EXAMPLES: "願い事の例： 無病息災、病気平癒、延命長寿、毎日を健康で過ごせますように、厄除、勝運成就、合格祈願、良縁成就、良いご縁がありますように、商売繁盛、交通安全など",
     YOUR_WISH: "あなたの願い事",

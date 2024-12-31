@@ -15,13 +15,15 @@ export const templateCreatorAddress = network === "mainnet" ? "0x67fb6951287a290
 export const templateId = network === "mainnet" ? '1' : '1'; // Digital Ema - Dappy
 export const templateNameToId = network === "mainnet" ? {
     dappy: '1',
-    dragon: '2',
+    // dragon: '2',
+    snake: '6',
     fuji: '3',
     origami: '4',
     flower: '5',
 } : {
     dappy: '1',
-    dragon: '2',
+    // dragon: '2',
+    snake: '6',
     fuji: '3',
     origami: '4',
     flower: '5',

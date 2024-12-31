@@ -1,8 +1,8 @@
 export default {
     DIGITAL_EMA: "Digital Ema",
-    LETS_MAKE_EMA: "Let's make an Ema (wooden wishing plaques) with your wishes for 2024!",
+    LETS_MAKE_EMA: "Let's make an Ema (wooden wishing plaques) with your wishes for 2025!",
     BUTTON_GETTING_STARTED: "Create Ema",
-    WRITE_WISHES_FOR_NEW_YEAR: "Write your wishes for 2024!",
+    WRITE_WISHES_FOR_NEW_YEAR: "Write your wishes for 2025!",
     WRITE_WISHES_DESCRIPTION: "This wish will be inscribed on the blockchain and remain in digital space. Please be mindful!",
     WISHES_EXAMPLES: "Examples of wishes: for good health, recovery from illness, prolongation of life, good health everyday, prevention of bad luck, success in life, success in school, good marriage, good fortune, prosperity in business, traffic safety, etc.",
     YOUR_WISH: "Your wish",

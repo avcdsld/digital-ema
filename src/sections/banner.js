@@ -6,7 +6,7 @@ import SectionHeading from 'components/section-heading';
 import { Link } from 'components/link';
 import { useLocale } from 'hooks/useLocale';
 
-const illustration = '/assets/images/ema/banner2024.png';
+const illustration = '/assets/images/ema/banner2025.png';
 
 const Banner = () => {
   const { t } = useLocale();
