@@ -16,14 +16,14 @@ export const templateId = network === "mainnet" ? '1' : '1'; // Digital Ema - Da
 export const templateNameToId = network === "mainnet" ? {
     dappy: '1',
     // dragon: '2',
-    snake: '6',
+    snake: '8',
     fuji: '3',
     origami: '4',
     flower: '5',
 } : {
     dappy: '1',
     // dragon: '2',
-    snake: '6',
+    snake: '8',
     fuji: '3',
     origami: '4',
     flower: '5',
