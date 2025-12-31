@@ -87,16 +87,13 @@ export default Emas;
 
 const styles = {
   section: {
-    backgroundColor: rgba('#FFFFFF', 0.5),
-    pt: [9, 9, 9, 11],
-    pb: [9, 9, 9, 12, 12, 14],
+    backgroundColor: '#FFFEF9',
+    pt: [14, 14, 14, 18],
+    pb: [14, 14, 14, 18],
+    position: 'relative',
   },
   heading: {
-    mb: [6, null, null, 8, 9, null, 13],
-    p: {
-      maxWidth: 500,
-      margin: '10px auto 0',
-    },
+    mb: [8, null, null, 10],
   },
   contentWrapper: {
     display: 'flex',
@@ -105,17 +102,21 @@ const styles = {
     justifyContent: 'flex-end',
   },
   illustration: {
-    display: ['block', null, null, 'flex'],
+    display: 'block',
+    width: '100%',
     position: 'relative',
-    img: {
-      display: ['block', null, null, 'block'],
-      maxWidth: ['90%'],
-      m: ['8px auto 0', null, null, '16px auto 0'],
-    },
-    mb: [60],
+    mb: [8],
   },
   emasWrapper: {
-    textAlign: ['center'],
-    mb: [20],
+    textAlign: 'center',
+    p: [2, null, null, 3],
+    transition: 'all 0.3s ease',
+    '&:hover': {
+      transform: 'translateY(-4px)',
+    },
+    img: {
+      width: '100%',
+      mixBlendMode: 'multiply',
+    },
   },
 };

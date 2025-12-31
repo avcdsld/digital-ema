@@ -1,4 +1,4 @@
-const twitter = '/assets/images/icons/twitter.png';
+const xIcon = '/assets/images/icons/x.svg';
 const github = '/assets/images/icons/github.png';
 
 export const menuItems = [
@@ -29,14 +29,14 @@ export const menuItems = [
     title: 'Connect',
     items: [
       {
-        path: 'https://twitter.com/arandoros',
-        icon: twitter,
-        label: 'Twitter',
+        path: 'https://x.com/arandoros',
+        icon: xIcon,
+        label: 'X',
       },
       {
         path: 'https://github.com/avcdsld/digital-ema',
         icon: github,
-        label: 'Github',
+        label: 'GitHub',
       },
     ],
   },

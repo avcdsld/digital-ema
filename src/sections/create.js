@@ -197,14 +197,14 @@ const Create = () => {
             ) : !isTxSealed ? (
               <span>
                 <p>{t.MODAL_MESSAGE3}</p>
-                {txId && <p><a style={{ color: '#343D48' }} href={explorerUrl + txId} target={'_blank'}>{t.MODAL_CHECK_ON_FLOWDIVER}</a></p>}
+                {txId && <p><a style={{ color: '#2C4A6E' }} href={explorerUrl + txId} target={'_blank'}>{t.MODAL_CHECK_ON_FLOWDIVER}</a></p>}
                 <Spinner size={32} ml={2} mr={2} />
               </span>
             ) : (
               <span>
                 <p>{t.MODAL_MESSAGE4}</p>
-                <p><a style={{ color: '#343D48' }} href={locale === 'ja' ? `/ja/view/${account.addr}` : `/view/${account.addr}`}>{t.MODAL_GOTO_MY_EMA}</a></p>
-                {txId && <p><a style={{ color: '#343D48' }} href={explorerUrl + txId} target={'_blank'}>{t.MODAL_CHECK_ON_FLOWDIVER}</a></p>}
+                <p><a style={{ color: '#2C4A6E' }} href={locale === 'ja' ? `/ja/view/${account.addr}` : `/view/${account.addr}`}>{t.MODAL_GOTO_MY_EMA}</a></p>
+                {txId && <p><a style={{ color: '#2C4A6E' }} href={explorerUrl + txId} target={'_blank'}>{t.MODAL_CHECK_ON_FLOWDIVER}</a></p>}
               </span>
             )}
           </Modal>
@@ -223,54 +223,72 @@ export default Create;
 
 const styles = {
   section: {
-    backgroundColor: rgba('#FFF5ED', 0.5),
-    pt: [11, 11, 11, 12, 12, 12, 14],
-    pb: [7, 7, 7, 9, 9, 10, 11],
+    backgroundColor: '#F8F5EF',
+    pt: [14, 14, 14, 18, 18, 18, 20],
+    pb: [12, 12, 12, 16, 16, 16, 18],
+    position: 'relative',
   },
   heading: {
-    maxWidth: [null, null, null, 455, 660],
-    mb: [6],
+    maxWidth: [null, null, null, 500, 600],
+    mb: [8],
   },
   contentWrapper: {
-    maxWidth: [null, null, null, 455, 660],
+    maxWidth: [null, null, null, 480, 560],
     mx: 'auto',
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-end',
     p: {
-      color: 'heading',
-      fontSize: [1, null, null, 1],
-      lineHeight: [1.58, 1.58, 1.58, 1.58],
-      pb: [2],
+      color: '#5C5552',
+      fontSize: ['13px', null, null, '14px'],
+      lineHeight: 1.8,
+      pb: [4],
+      textAlign: 'center',
     },
     textarea: {
-      fontSize: [1, null, null, 2],
-      fontFamily: 'inherit',
-      fontSize: 'inherit',
-      lineHeight: [2],
-      border: '2px solid #888888',
-      borderRadius: '6px',
+      width: '100%',
+      fontSize: '15px',
+      fontFamily: 'body',
+      lineHeight: 1.8,
+      border: '1px solid #E8E4DC',
+      borderRadius: '0',
+      bg: '#FFFEF9',
       resize: 'vertical',
-      mb: [2],
+      mb: [4],
+      p: 4,
+      transition: 'all 0.2s ease',
+      '&::placeholder': {
+        color: '#B8B3AC',
+      },
     },
     'textarea:focus': {
-      borderColor: 'var(--theme-ui-colors-primary,#0A8080)',
-      boxShadow: '0 0 0 1px var(--theme-ui-colors-primary,#0A8080)',
+      borderColor: '#B33E3E',
+      boxShadow: '0 0 0 3px rgba(179, 62, 62, 0.08)',
       outline: 'none',
     },
     input: {
-      fontSize: [1, null, null, 2],
-      border: '2px solid #888888',
-      mb: [2],
+      width: '100%',
+      fontSize: '15px',
+      border: '1px solid #E8E4DC',
+      borderRadius: '0',
+      bg: '#FFFEF9',
+      mb: [4],
+      height: '52px',
+      px: 4,
+      transition: 'all 0.2s ease',
+      '&::placeholder': {
+        color: '#B8B3AC',
+      },
     },
     'input:focus': {
-      borderColor: 'var(--theme-ui-colors-primary,#0A8080)',
-      boxShadow: '0 0 0 1px var(--theme-ui-colors-primary,#0A8080)',
+      borderColor: '#B33E3E',
+      boxShadow: '0 0 0 3px rgba(179, 62, 62, 0.08)',
       outline: 'none',
     },
     button: {
-      m: [6],
+      mt: [6],
+      mb: [4],
     },
   },
 };
@@ -284,7 +302,16 @@ const modalStyles = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
     marginLeft: '0',
-    marginRight: '25px',
-    padding: '25px',
+    padding: '40px',
+    borderRadius: '0',
+    border: 'none',
+    boxShadow: '0 20px 60px rgba(26, 19, 17, 0.2)',
+    backgroundColor: '#FFFEF9',
+    maxWidth: '420px',
+    width: '90%',
+  },
+  overlay: {
+    backgroundColor: 'rgba(26, 19, 17, 0.7)',
+    backdropFilter: 'blur(4px)',
   },
 };

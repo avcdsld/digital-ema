@@ -1,58 +1,77 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { jsx, Box, Container, Heading, Text, Image } from 'theme-ui';
-import Tabs, { TabPane } from 'rc-tabs';
-import { rgba } from 'polished';
+import { useState } from 'react';
+import { jsx, Box, Container, Heading, Text } from 'theme-ui';
 import { useLocale } from 'hooks/useLocale';
-
-const tabImage1 = '/assets/images/tab-illustration-1.jpeg';
-const tabImage2 = '/assets/images/tab-illustration-2.jpeg';
-const tabImage3 = '/assets/images/tab-illustration-3.jpeg';
 
 const FAQ = () => {
   const { t } = useLocale();
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const data = [
     {
       id: 1,
-      tabTitle: t.FAQ1_Q,
-      description: t.FAQ1_A,
-      image: tabImage1,
+      question: t.FAQ1_Q,
+      answer: t.FAQ1_A,
     },
     {
       id: 2,
-      tabTitle: t.FAQ2_Q,
-      description: t.FAQ2_A,
-      image: tabImage2,
+      question: t.FAQ2_Q,
+      answer: t.FAQ2_A,
     },
     {
       id: 3,
-      tabTitle: t.FAQ3_Q,
-      description: t.FAQ3_A,
-      image: tabImage3,
+      question: t.FAQ3_Q,
+      answer: t.FAQ3_A,
     },
   ];
 
   return (
     <Box as="section" id="faq" sx={styles.section}>
-      <Container>
-        <Tabs sx={styles.tabs} animated={{ tabPane: true }}>
-          {data?.map((item) => (
-            <TabPane
+      <Container sx={styles.container}>
+        <Box sx={styles.sectionHeader}>
+          <Text as="span" sx={styles.labelText}>FAQ</Text>
+          <Heading as="h2" sx={styles.sectionTitle}>
+            {t.FAQ_TITLE}
+          </Heading>
+          <Box sx={styles.titleDecoration} />
+        </Box>
+
+        <Box sx={styles.faqList}>
+          {data.map((item, index) => (
+            <Box
               key={item.id}
-              tab={<Heading as="h4">{item.tabTitle}</Heading>}
+              sx={{
+                ...styles.faqItem,
+                ...(activeIndex === index ? styles.faqItemActive : {}),
+              }}
+              onClick={() => setActiveIndex(index)}
             >
-              <Box>
-                <Text as="p" sx={styles.description}>
-                  {item.description}
+              <Box sx={styles.faqHeader}>
+                <Text as="span" sx={styles.faqNumber}>
+                  {String(index + 1).padStart(2, '0')}
                 </Text>
+                <Heading as="h4" sx={styles.faqQuestion}>
+                  {item.question}
+                </Heading>
+                <Box sx={{
+                  ...styles.faqIcon,
+                  transform: activeIndex === index ? 'rotate(45deg)' : 'rotate(0deg)',
+                }}>
+                  +
+                </Box>
               </Box>
-              <Box sx={styles.illustration}>
-                <Image src={item.image} alt="illustration" />
+              <Box sx={{
+                ...styles.faqAnswer,
+                maxHeight: activeIndex === index ? '500px' : '0',
+                opacity: activeIndex === index ? 1 : 0,
+                pt: activeIndex === index ? 4 : 0,
+              }}>
+                <Text as="p">{item.answer}</Text>
               </Box>
-            </TabPane>
+            </Box>
           ))}
-        </Tabs>
+        </Box>
       </Container>
     </Box>
   );
@@ -62,95 +81,97 @@ export default FAQ;
 
 const styles = {
   section: {
-    backgroundColor: rgba('#FFF5ED', 0.5),
-    pt: [11, null, null, 12],
-    pb: [8, null, null, 9, null, 11],
+    backgroundColor: '#FFFEF9',
+    pt: [14, null, null, 18],
+    pb: [14, null, null, 18],
+    position: 'relative',
   },
-  tabs: {
-    border: 0,
-    '.rc-tabs-nav': {
-      mb: [8, null, null, 9, 10, 9, 12],
-    },
-    '.rc-tabs-nav-wrap': {
-      borderBottom: `1px solid ${rgba('#01070D', 0.1)}`,
-      justifyContent: 'center',
-    },
-    '.rc-tabs-nav-list': {
-      flexGrow: 1,
-      justifyContent: 'space-evenly',
-      pb: [3, null, null, 5, null, 6],
-    },
-    '.rc-tabs-tab-btn': {
-      outline: 0,
-      alignItems: 'center',
-      img: {
-        outline: 0,
-      },
-    },
-    '.rc-tabs-tab': {
-      backgroundColor: 'transparent',
-      // m: ['0 45px'],
-      h4: {
-        fontFamily: 'body',
-        fontSize: [0, null, null, 17, null, null, 4],
-        fontWeight: 700,
-        lineHeight: 1.5,
-        textAlign: ['center', null, null, null, 'left'],
-        whiteSpace: ['break-spaces', null, null, null, 'unset'],
-      },
-    },
-    '.rc-tabs-tabpane': {
-      display: ['flex', null, null, 'grid'],
-      flexDirection: ['column-reverse', null, null, 'unset'],
-      alignItems: 'center',
-      justifyContent: 'center',
-      gridTemplateColumns: [null, null, null, '0.9fr 1.1fr'],
-      outline: 0,
-      gap: [5, null, null, 11],
-      h2: {
-        color: 'heading',
-        fontSize: [24, null, null, 6, 26, 8, 40],
-        fontWeight: 700,
-        lineHeight: [1.45, null, null, 1.5],
-        letterSpacing: [null, null, null, '0.5px', null, '-1px'],
-        textAlign: ['center', null, null, 'left'],
-      },
-      p: {
-        color: 'textSecondary',
-        fontSize: [1, null, null, 2, 17],
-        lineHeight: [1.87, null, null, 2, 2.48],
-        textAlign: ['center', null, null, 'left'],
-        mt: [4],
-      },
-      '.list-item': {
-        fontSize: [0, null, null, 1, 2],
-        fontWeight: 500,
-        lineHeight: [2.8],
-        display: 'flex',
-        alignItems: 'center',
-      },
+  container: {
+    maxWidth: '800px',
+  },
+  sectionHeader: {
+    textAlign: 'center',
+    mb: [10, null, null, 12],
+  },
+  labelText: {
+    display: 'inline-block',
+    fontSize: '12px',
+    fontWeight: 600,
+    letterSpacing: '0.2em',
+    color: '#B33E3E',
+    mb: 3,
+    textTransform: 'uppercase',
+  },
+  sectionTitle: {
+    fontFamily: 'heading',
+    fontSize: [6, null, null, 8],
+    fontWeight: 500,
+    color: '#1A1311',
+    letterSpacing: '0.08em',
+    mb: 4,
+  },
+  titleDecoration: {
+    width: '60px',
+    height: '2px',
+    background: 'linear-gradient(90deg, #B33E3E 0%, #C4A747 100%)',
+    mx: 'auto',
+  },
+  faqList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 4,
+  },
+  faqItem: {
+    backgroundColor: '#FFFEF9',
+    border: '1px solid #E8E4DC',
+    padding: [4, null, null, 5],
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    '&:hover': {
+      borderColor: '#C4A747',
     },
   },
-  list: {
-    mt: [5],
-    display: 'grid',
-    justifyContent: ['center', null, null, 'unset'],
-    gridTemplateColumns: ['repeat(2, 164px)', null, null, 'repeat(2, 180px)'],
+  faqItemActive: {
+    borderColor: '#B33E3E',
+    borderLeft: '3px solid #B33E3E',
+    backgroundColor: '#FDFCF8',
   },
-  learnMore: {
-    mt: [4],
-    textAlign: ['center', null, null, 'left'],
-    a: {
-      fontSize: [null, null, null, 1, 2],
-    },
-  },
-  illustration: {
-    display: ['flex'],
+  faqHeader: {
+    display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: [null, null, null, null, null, 'center'],
-    img: {
-      maxWidth: ['65%', null, null, '100%', null, '90%', '100%'],
+    gap: [3, null, null, 4],
+  },
+  faqNumber: {
+    fontFamily: 'heading',
+    fontSize: ['14px', null, null, '16px'],
+    fontWeight: 500,
+    color: '#C4A747',
+    minWidth: '32px',
+  },
+  faqQuestion: {
+    fontFamily: 'body',
+    fontSize: [1, null, null, 2],
+    fontWeight: 500,
+    color: '#2D2926',
+    flex: 1,
+    lineHeight: 1.6,
+  },
+  faqIcon: {
+    fontSize: '24px',
+    fontWeight: 300,
+    color: '#B33E3E',
+    transition: 'transform 0.3s ease',
+    minWidth: '24px',
+    textAlign: 'center',
+  },
+  faqAnswer: {
+    overflow: 'hidden',
+    transition: 'all 0.4s ease',
+    pl: ['40px', null, null, '48px'],
+    p: {
+      fontSize: [1, null, null, 2],
+      lineHeight: 2,
+      color: '#5C5552',
     },
   },
 };

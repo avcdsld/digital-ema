@@ -7,6 +7,7 @@ import Logo from 'components/logo';
 import { NavLink, Link } from 'components/link';
 import { DrawerProvider } from 'contexts/drawer/drawer-provider';
 import NavbarDrawer from './navbar-drawer';
+import LocaleToggle from 'components/locale-toggle';
 import menuItems from './header.data';
 
 export default function Header() {
@@ -20,7 +21,7 @@ export default function Header() {
           <Box as="header" sx={styles.header}>
             <Container>
               <Box sx={styles.headerInner}>
-                <Logo sx={styles.logo} />
+                <Logo light sx={styles.logo} />
                 <Box as="nav" sx={styles.navbar} className="navbar">
                   <Box as="ul" sx={styles.navList}>
                     {pathName === '/' && menuItems.map(({ path, label }, i) => (
@@ -35,6 +36,7 @@ export default function Header() {
                     ))}
                   </Box>
                 </Box>
+                <LocaleToggle />
                 <NavbarDrawer />
               </Box>
             </Container>
@@ -50,10 +52,10 @@ const styles = {
     backgroundColor: 'transparent',
     '.is-sticky': {
       header: {
-        backgroundColor: 'white',
-        boxShadow: '0 6px 13px rgba(38,78,118,0.1)',
-        paddingTop: '15px',
-        paddingBottom: '15px',
+        backgroundColor: '#B33E3E',
+        boxShadow: '0 4px 20px rgba(26, 19, 17, 0.3)',
+        paddingTop: '10px',
+        paddingBottom: '10px',
       },
     },
   },
@@ -61,10 +63,11 @@ const styles = {
     position: 'fixed',
     left: 0,
     right: 0,
-    py: 4,
+    py: 3,
+    backgroundColor: '#B33E3E',
     transition: 'all 0.3s ease-in-out 0s',
     '&.is-mobile-menu': {
-      backgroundColor: 'white',
+      backgroundColor: '#B33E3E',
     },
   },
   headerInner: {
@@ -79,12 +82,10 @@ const styles = {
     display: ['none', null, null, null, 'flex'],
     alignItems: 'center',
     flexGrow: 1,
-    // justifyContent: 'center',
   },
   navList: {
     display: ['flex'],
     listStyle: 'none',
-    // marginLeft: 'auto',
     flexGrow: 1,
     p: 0,
     'li:last-child': {
@@ -92,28 +93,47 @@ const styles = {
     },
     '.nav-item': {
       cursor: 'pointer',
-      fontWeight: 400,
+      fontWeight: 500,
       padding: 0,
-      margin: [0, 0, 0, 0, '0 20px'],
+      margin: [0, 0, 0, 0, '0 24px'],
     },
     '.active': {
-      color: 'primary',
+      color: '#C4A747',
     },
     a: {
       cursor: 'pointer',
-      color: '#343D48',
+      color: '#FFFEF9',
       textDecoration: 'none',
-      fontWeight: 400,
+      fontWeight: 500,
       padding: 0,
-      margin: [0, 0, 0, 0, '0 20px'],
+      margin: [0, 0, 0, 0, '0 24px'],
+      letterSpacing: '0.08em',
+      transition: 'all 0.2s ease',
+      position: 'relative',
+      '&::after': {
+        content: '""',
+        position: 'absolute',
+        bottom: '-4px',
+        left: 0,
+        width: 0,
+        height: '2px',
+        backgroundColor: '#C4A747',
+        transition: 'width 0.3s ease',
+      },
+      '&:hover': {
+        color: '#C4A747',
+        '&::after': {
+          width: '100%',
+        },
+      },
     },
   },
   getStartedDesktop: {
-    color: 'primary',
+    color: '#FFFEF9',
     display: ['none', 'none', 'none', 'none', 'flex'],
   },
   getStartedMobile: {
-    color: 'primary',
+    color: '#FFFEF9',
     fontSize: [1],
     minHeight: 30,
     m: ['0 15px 0 auto'],
@@ -127,7 +147,7 @@ const styles = {
     width: '32px',
     ml: '3px',
     path: {
-      stroke: 'text',
+      stroke: '#FFFEF9',
     },
   },
 };

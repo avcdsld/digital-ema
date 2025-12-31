@@ -224,14 +224,17 @@ export default function EmaSvg({ message, name, dateStr, templateName, eyeColor,
     }
 
     return (
-        <div style={{ margin: '4px' }}>
+        <div style={{
+            margin: '8px',
+            filter: 'drop-shadow(4px 6px 8px rgba(26, 19, 17, 0.25))',
+        }}>
             <svg
                 width="400"
                 height="350"
                 viewBox="0 0 400 343.6986"
                 id="svg603"
                 xmlns="http://www.w3.org/2000/svg"
-                style={{ a: { fill: '#febe69' }, b: { fill: '#f2635f' }, c: { fill: '#645d5c' }, d: { fill: '#ffebd2' } }}
+                style={{ display: 'block' }}
             >
                 <defs
                     id="defs591">

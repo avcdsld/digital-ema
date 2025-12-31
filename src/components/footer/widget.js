@@ -43,7 +43,9 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         img: {
-          mr: '15px',
+          width: '20px',
+          height: '20px',
+          mr: '10px',
         },
       },
       a: {

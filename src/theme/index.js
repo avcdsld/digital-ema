@@ -1,102 +1,60 @@
-export default {
-  // example colors with dark mode
-  colors: {
-    text: '#343D48', // body color and primary color
-    textSecondary: '#02073E', // secondary body color
-    heading: '#0F2137', // primary heading color
-    headingSecondary: '#343D48', // heading color
-    background: '#FFFFFF', // body background color
-    backgroundSecondary: '#F9FBFD', // secondary background color
-    borderColor: '#F3F4F5', // border color
-    primary: '#0A8080', // primary button and link color
-    secondary: '#DB4A87', // secondary color - can be used for hover states
-    muted: '#7B8188', // muted color
-    accent: '#609', // a contrast color for emphasizing UI
-    dark: '#10132D',
-    link: '#4F96FF', // default link color
+// 和柄パターン（市松模様）をSVGで定義
+const asanohaPattern = `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30L30 0z' fill='none' stroke='%23D9D4CB' stroke-width='0.5' opacity='0.3'/%3E%3Cpath d='M30 15L45 30L30 45L15 30L30 15z' fill='none' stroke='%23D9D4CB' stroke-width='0.5' opacity='0.3'/%3E%3C/svg%3E")`;
 
-    // // highlight	a background color for highlighting text
-    // modes: {
-    //   dark: {
-    //     text: '#fff',
-    //     background: '#000',
-    //     primary: '#0cf',
-    //     secondary: '#09c',
-    //     muted: '#111',
-    //   },
-    // },
+const ichimatsuPattern = `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='20' height='20' fill='%23B33E3E' opacity='0.03'/%3E%3Crect x='20' y='20' width='20' height='20' fill='%23B33E3E' opacity='0.03'/%3E%3C/svg%3E")`;
+
+export default {
+  colors: {
+    // テキスト
+    text: '#2D2926',           // 墨色
+    textSecondary: '#5C5552',  // 鼠色
+    heading: '#1A1311',        // 漆黒
+    headingSecondary: '#3E3835', // 消炭色
+
+    // 背景
+    background: '#FFFEF9',     // 生成色
+    backgroundSecondary: '#F5F0E6', // 和紙色
+
+    // ブランドカラー
+    primary: '#B33E3E',        // 朱色
+    secondary: '#C4A747',      // 金色
+    accent: '#2C4A6E',         // 藍色
+
+    // ユーティリティ
+    borderColor: '#D9D4CB',    // 白茶色
+    muted: '#8C8279',          // 灰茶色
+    dark: '#1A1311',           // 漆黒
+    link: '#2C4A6E',           // 藍色
   },
   fonts: {
-    body: 'DM Sans',
-    // body:
-    //   'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
-    heading: 'B612, sans-serif',
+    body: '"Source Sans 3", "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif',
+    heading: '"Fraunces", "Noto Serif JP", "Hiragino Mincho ProN", serif',
     monospace: 'Menlo, monospace',
   },
   fontSizes: [
-    12, // 0
-    14, // 1
-    16, // 2
-    18, // 3
-    20, // 4
-    22, // 5
-    24, // 6
-    28, // 7
-    32, // 8
-    36, // 9
-    42, // 10
-    48, // 11
-    52, // 12
-    64, //13
+    12, 14, 16, 18, 20, 22, 24, 28, 32, 36, 42, 48, 52, 64,
   ],
   fontWeights: {
-    body: 'normal',
-    // body: 400,
+    body: 400,
     heading: 500,
-    // heading: 700,
     bold: 700,
   },
   lineHeights: {
-    body: 1.5,
-    // body: 1.5,
-    heading: 1.25,
-    // heading: 1.125,
+    body: 1.8,
+    heading: 1.5,
   },
   letterSpacings: {
-    body: 'normal',
-    caps: '0.2em',
-    heading: '-0.5px',
+    body: '0.02em',
+    caps: '0.15em',
+    heading: '0.08em',
   },
   space: [
-    0, //0
-    5, //1
-    10, //2
-    15, //3
-    20, //4
-    25, //5
-    30, //6
-    40, //7
-    50, //8
-    60, //9
-    70, //10
-    80, //11
-    100, //12
-    120, //13
-    130, //14
-    150, //15
+    0, 5, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 100, 120, 130, 150,
   ],
   sizes: {},
   breakpoints: [
-    '480px',
-    '640px',
-    '768px',
-    '1024px',
-    '1200px',
-    '1367px',
-    '1440px',
-    '1600px',
+    '480px', '640px', '768px', '1024px', '1200px', '1367px', '1440px', '1600px',
   ],
-  // variants can use custom, user-defined names
   layout: {
     container: {
       maxWidth: ['100%', null, null, null, '970px', '1140px', '1260px'],
@@ -107,7 +65,6 @@ export default {
     toolbar: {
       display: 'flex',
       alignItems: 'center',
-      // justifyContent: 'space-between',
     },
     main: {},
     footer: {},
@@ -120,12 +77,13 @@ export default {
       fontFamily: 'heading',
       lineHeight: 'heading',
       fontWeight: 'heading',
+      letterSpacing: 'heading',
     },
     heroTitle: {
       fontSize: [4, null, null, 5, null, 5, 6],
-      fontWeight: 700,
+      fontWeight: 500,
       letterSpacing: 'heading',
-      lineHeight: [1.4, null, null, null, null, null, 1.57],
+      lineHeight: [1.4, null, null, null, null, null, 1.5],
     },
   },
   links: {
@@ -139,8 +97,13 @@ export default {
       display: 'inline-flex',
       alignItems: 'center',
       textDecoration: 'none',
-      fontWeight: 700,
+      fontWeight: 500,
       color: 'primary',
+      transition: 'all 0.3s ease',
+      ':hover': {
+        color: '#9A3535',
+        letterSpacing: '0.1em',
+      },
     },
     nav: {
       display: ['none', null, 'inline-flex'],
@@ -162,70 +125,112 @@ export default {
       borderRadius: 99999,
     },
   },
-  // variants for buttons
   buttons: {
-    menu: {
-      display: ['block', null, null, null, 'none'],
-      svg: {
-        width: '32px',
-      },
-    },
     default: {
       backgroundColor: 'transparent',
       fontFamily: 'body',
-      fontWeight: 'bold',
-      borderRadius: '5px',
+      fontWeight: 500,
+      borderRadius: '0',
       cursor: 'pointer',
       display: 'inline-flex',
       alignItems: 'center',
       justifyContent: 'center',
-      transition: '0.3s ease-in-out 0s',
+      transition: 'all 0.25s ease',
       whiteSpace: 'nowrap',
+      letterSpacing: '0.12em',
+      position: 'relative',
     },
     primary: {
       variant: 'buttons.default',
-      color: 'white',
+      color: '#FFFEF9',
       bg: 'primary',
-      minHeight: ['50px', null, null, null, null, '60px'],
-      padding: ['0 25px', null, null, '0 30px'],
+      minHeight: ['50px', null, null, null, null, '54px'],
+      padding: ['0 28px', null, null, '0 40px'],
+      fontSize: [1, null, null, '15px'],
+      border: 'none',
+      boxShadow: '0 4px 12px rgba(179, 62, 62, 0.3)',
       '&:hover': {
-        bg: 'dark',
+        bg: '#A33636',
+        boxShadow: '0 6px 20px rgba(179, 62, 62, 0.4)',
+        transform: 'translateY(-2px)',
+      },
+      '&:active': {
+        transform: 'translateY(0)',
+        boxShadow: '0 2px 8px rgba(179, 62, 62, 0.3)',
       },
     },
     primaryMd: {
       variant: 'buttons.primary',
-      minHeight: '50px',
-      px: '25px',
+      minHeight: '46px',
+      px: '24px',
+      fontSize: '14px',
     },
     secondary: {
-      variant: 'buttons.primary',
-      color: 'white',
-      bg: 'secondary',
+      variant: 'buttons.default',
+      color: 'primary',
+      bg: 'transparent',
+      border: '1px solid',
+      borderColor: 'primary',
+      minHeight: ['48px', null, null, null, null, '52px'],
+      padding: ['0 24px', null, null, '0 32px'],
+      '&:hover': {
+        bg: 'primary',
+        color: '#FFFEF9',
+        boxShadow: '0 4px 12px rgba(179, 62, 62, 0.3)',
+      },
     },
     muted: {
       variant: 'buttons.default',
-      backgroundColor: '#EDF0F2',
+      backgroundColor: '#F8F5EF',
       color: 'text',
+      border: '1px solid #E8E4DC',
       ':hover': {
-        backgroundColor: 'primary',
-        color: '#fff',
+        backgroundColor: '#F0EBE2',
+        borderColor: '#D9D4CB',
       },
     },
     white: {
       variant: 'buttons.default',
-      backgroundColor: 'white',
-      color: '#020718',
+      backgroundColor: '#FFFEF9',
+      color: 'heading',
+      border: '1px solid #E8E4DC',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+      '&:hover': {
+        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+      },
     },
     text: {
       variant: 'buttons.default',
-      color: 'text',
+      color: 'primary',
+      padding: '8px 4px',
+      position: 'relative',
+      '&::after': {
+        content: '""',
+        position: 'absolute',
+        bottom: '4px',
+        left: '4px',
+        right: '4px',
+        height: '1px',
+        bg: 'primary',
+        opacity: 0.3,
+        transition: 'all 0.25s ease',
+      },
+      '&:hover': {
+        color: '#A33636',
+        '&::after': {
+          opacity: 1,
+        },
+      },
     },
   },
   cards: {
     primary: {
-      padding: 2,
-      borderRadius: 4,
-      // boxShadow: '0 0 4px 1px rgba(0, 0, 0, 0.5)',
+      padding: 4,
+      borderRadius: '0',
+      bg: 'background',
+      border: '1px solid',
+      borderColor: 'borderColor',
+      boxShadow: '4px 4px 0 rgba(45, 41, 38, 0.1)',
     },
     offer: {
       display: 'flex',
@@ -235,9 +240,9 @@ export default {
       flex: ['1 1 calc(50% - 16px)', '1 1 20%'],
       minHeight: 130,
       m: 2,
-      background: '#FFFFFF',
-      border: '1px solid #EDEFF6',
-      borderRadius: 5,
+      background: '#FFFEF9',
+      border: '1px solid #D9D4CB',
+      borderRadius: '0',
     },
     featureCard: {
       display: 'flex',
@@ -248,55 +253,74 @@ export default {
   },
   forms: {
     label: {
-      fontSize: 1,
-      fontWeight: 'bold',
+      fontSize: '13px',
+      fontWeight: 500,
+      color: '#5C5552',
+      mb: 2,
+      letterSpacing: '0.05em',
     },
     input: {
-      borderRadius: 8,
-      borderColor: 'borderColor',
-      height: 60,
+      borderRadius: '0',
+      border: '1px solid #E8E4DC',
+      height: 52,
+      bg: '#FFFEF9',
+      fontFamily: 'body',
+      fontSize: '15px',
+      px: 4,
+      transition: 'all 0.2s ease',
       '&:focus': {
-        borderColor: 'primary',
-        boxShadow: (t) => `0 0 0 2px ${t.colors.primary}`,
+        borderColor: '#B33E3E',
+        boxShadow: '0 0 0 3px rgba(179, 62, 62, 0.08)',
         outline: 'none',
+      },
+      '&::placeholder': {
+        color: '#B8B3AC',
+      },
+    },
+    textarea: {
+      borderRadius: '0',
+      border: '1px solid #E8E4DC',
+      bg: '#FFFEF9',
+      fontFamily: 'body',
+      fontSize: '15px',
+      p: 4,
+      lineHeight: 1.8,
+      resize: 'vertical',
+      transition: 'all 0.2s ease',
+      '&:focus': {
+        borderColor: '#B33E3E',
+        boxShadow: '0 0 0 3px rgba(179, 62, 62, 0.08)',
+        outline: 'none',
+      },
+      '&::placeholder': {
+        color: '#B8B3AC',
       },
     },
   },
-
   badges: {
     primary: {
       color: 'background',
-      bg: '#28A5FF',
-      borderRadius: 30,
-      p: '3px 11px',
+      bg: 'primary',
+      borderRadius: '0',
+      p: '4px 12px',
       fontSize: 1,
-      letterSpacing: '-0.5px',
+      letterSpacing: '0.05em',
     },
     outline: {
       color: 'primary',
       bg: 'transparent',
-      boxShadow: 'inset 0 0 0 1px',
+      boxShadow: 'inset 0 0 0 2px',
     },
   },
-
   styles: {
-    // To add base, top-level styles to the <body> element, use theme.styles.root.
     root: {
       fontFamily: 'body',
       lineHeight: 'body',
       fontWeight: 'body',
+      bg: 'background',
     },
-    // h1-h6 Heading styles
-    h1: {
-      // fontFamily: 'none',
-      // variant: 'text.heading',
-      // fontSize: 6,
-    },
-    h2: {
-      // fontFamily: 'none',
-      // variant: 'text.heading',
-      // fontSize: 5,
-    },
+    h1: {},
+    h2: {},
     h3: {
       variant: 'text.heading',
       fontSize: 4,
@@ -313,13 +337,11 @@ export default {
       variant: 'text.heading',
       fontSize: 1,
     },
-    // Divider styles
     hr: {
       border: 0,
       borderBottom: '1px solid',
-      borderColor: '#D9E0E7',
+      borderColor: '#D9D4CB',
     },
-    // also you can use other HTML elements style here
     ul: {
       listStyle: 'none',
     },
@@ -335,5 +357,10 @@ export default {
       width: '1px !important',
       whiteSpace: 'nowrap !important',
     },
+  },
+  // カスタムパターン
+  patterns: {
+    asanoha: asanohaPattern,
+    ichimatsu: ichimatsuPattern,
   },
 };

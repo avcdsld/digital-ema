@@ -1,8 +1,6 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { jsx, Box, Container, Button, Image } from 'theme-ui';
-import { rgba } from 'polished';
-import SectionHeading from 'components/section-heading';
+import { jsx, Box, Container, Button, Image, Text, Heading } from 'theme-ui';
 import { Link } from 'components/link';
 import { useLocale } from 'hooks/useLocale';
 
@@ -15,17 +13,20 @@ const Banner = () => {
     <Box as="section" id="home" sx={styles.section}>
       <Container>
         <Box sx={styles.contentWrapper}>
-          <SectionHeading
-            sx={styles.heading}
-            title={t.DIGITAL_EMA}
-            description={t.LETS_MAKE_EMA}
-          />
-          <Box as="figure" sx={styles.illustration}>
+          <Box sx={styles.hero}>
+            <Text as="span" sx={styles.label}>Digital Ema on Flow</Text>
+            <Heading as="h1" sx={styles.title}>{t.DIGITAL_EMA}</Heading>
+            <Box sx={styles.titleDecoration}>
+              <Box sx={styles.decorationDot} />
+            </Box>
+            <Text as="p" sx={styles.description}>{t.LETS_MAKE_EMA}</Text>
             <Box sx={styles.buttonWrapper}>
               <Button>
                 <Link path={"#create"}>{t.BUTTON_GETTING_STARTED}</Link>
               </Button>
             </Box>
+          </Box>
+          <Box as="figure" sx={styles.illustration}>
             <Image src={illustration} alt="illustration" />
           </Box>
         </Box>
@@ -39,19 +40,11 @@ export default Banner;
 const styles = {
   section: {
     position: 'relative',
-    pt: [105, null, null, 140, 15, null, 170],
-    pb: [8, null, null, 0],
+    pt: [120, null, null, 150, 160, null, 180],
+    pb: [80, null, null, 100, 120],
     zIndex: 0,
-    ':before': {
-      backgroundColor: rgba('#FFF5ED', 0.5),
-      content: ['none', null, null, `''`],
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      bottom: 0,
-      height: 72,
-      zIndex: -1,
-    },
+    backgroundColor: '#FFFEF9',
+    overflow: 'hidden',
   },
   contentWrapper: {
     display: 'flex',
@@ -60,44 +53,84 @@ const styles = {
     justifyContent: 'flex-end',
     a: {
       textDecoration: 'none',
-      textDecorationLine: 'none',
-      color: 'white',
+      color: '#FFFEF9',
       '&:visited': {
-        color: 'white',
+        color: '#FFFEF9',
       },
       span: {
-        color: 'white',
+        color: '#FFFEF9',
         textDecoration: 'none',
-        textDecorationLine: 'none',
       },
     },
   },
-  heading: {
-    mb: [30],
-    maxWidth: [null, null, null, 500, 560, 730],
-    h2: {
-      fontSize: [8, null, null, 8, 9, 10, 11],
-      lineHeight: [1.57],
+  hero: {
+    textAlign: 'center',
+    maxWidth: 700,
+    mb: [6, null, null, 8],
+  },
+  label: {
+    display: 'inline-block',
+    fontSize: '11px',
+    fontWeight: 600,
+    letterSpacing: '0.25em',
+    color: '#B33E3E',
+    mb: 4,
+    textTransform: 'uppercase',
+  },
+  title: {
+    fontFamily: 'heading',
+    fontSize: [8, null, null, 10, 11, 12],
+    lineHeight: 1.3,
+    color: '#1A1311',
+    letterSpacing: '0.1em',
+    fontWeight: 500,
+  },
+  titleDecoration: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    mt: 5,
+    mb: 5,
+    '&::before': {
+      content: '""',
+      width: '50px',
+      height: '1px',
+      background: 'linear-gradient(90deg, transparent 0%, #C4A747 100%)',
     },
-    p: {
-      fontSize: [1, null, null, 3],
-      lineHeight: [1.87, null, null, 2.33],
+    '&::after': {
+      content: '""',
+      width: '50px',
+      height: '1px',
+      background: 'linear-gradient(90deg, #C4A747 0%, transparent 100%)',
     },
   },
-  illustration: {
-    display: ['block', null, null, 'flex'],
-    position: 'relative',
-    img: {
-      display: ['block', null, null, 'block'],
-      maxWidth: ['90%'],
-      m: ['30px auto 0', null, null, '70px auto 0'],
-    },
+  decorationDot: {
+    width: '6px',
+    height: '6px',
+    backgroundColor: '#B33E3E',
+    transform: 'rotate(45deg)',
+    mx: 3,
+  },
+  description: {
+    fontSize: [2, null, null, 3],
+    lineHeight: 2,
+    color: '#5C5552',
+    maxWidth: 500,
+    mx: 'auto',
+    mb: 6,
   },
   buttonWrapper: {
-    textAlign: ['center'],
-    position: ['static', null, null, 'absolute'],
-    left: '50%',
-    top: 0,
-    transform: ['unset', null, null, 'translateX(-50%)'],
+    textAlign: 'center',
+  },
+  illustration: {
+    display: 'block',
+    position: 'relative',
+    textAlign: 'center',
+    img: {
+      display: 'block',
+      maxWidth: ['85%', null, null, '70%', '60%'],
+      mx: 'auto',
+      mixBlendMode: 'multiply',
+    },
   },
 };

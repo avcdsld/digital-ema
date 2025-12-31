@@ -10,6 +10,7 @@ export default {
     BUTTON_MAKE_EMA: "Create Ema",
     EVERYONES_EMAS: "Everyone's Digital Emas",
     SEE_MORE: "See more",
+    FAQ_TITLE: "About Digital Ema",
     FAQ1_Q: "What is Digital Ema?",
     FAQ1_A: "An Ema is a wooden board on which wishes and thanksgivings are written when praying at a shrine or temple. A digital ema is a modern updated version of the ema.",
     FAQ2_Q: "Where is the data recorded?",

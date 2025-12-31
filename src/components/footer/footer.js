@@ -4,7 +4,6 @@ import { jsx, Box, Text, Container } from 'theme-ui';
 import { Link } from 'components/link';
 import Widget from './widget';
 import { menuItems } from './footer.data';
-import { rgba } from 'polished';
 
 export default function Footer() {
   return (
@@ -15,9 +14,11 @@ export default function Footer() {
             <Widget key={id} title={title} items={items} />
           ))}
         </Box>
-        <Text as="p" sx={styles.copyright}>
-          © Ara ⛓️ Built on Flow
-        </Text>
+        <Box sx={styles.footerBottom}>
+          <Text as="p" sx={styles.copyright}>
+            © Ara ⛓️ Built on Flow
+          </Text>
+        </Box>
       </Container>
     </Box>
   );
@@ -25,8 +26,20 @@ export default function Footer() {
 
 const styles = {
   footer: {
-    pt: [8],
-    pb: [8],
+    pt: [10, null, null, 12],
+    pb: [8, null, null, 10],
+    backgroundColor: '#F5F0E6',
+    position: 'relative',
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: '50%',
+      transform: 'translateX(-50%)',
+      width: '80%',
+      height: '1px',
+      background: 'linear-gradient(90deg, transparent 0%, #D9D4CB 50%, transparent 100%)',
+    },
   },
   footerTopInner: {
     gap: [30, null, 50, '20px 50px', 17, 50],
@@ -38,26 +51,32 @@ const styles = {
       'repeat(4, 1fr)',
       'repeat(5, 1fr)',
     ],
+    'h4': {
+      color: '#1A1311',
+      fontSize: '13px',
+      fontWeight: 600,
+      letterSpacing: '0.1em',
+      mb: 3,
+    },
+    'a': {
+      color: '#5C5552',
+      transition: 'color 0.2s ease',
+      fontSize: '14px',
+    },
+    'a:hover': {
+      color: '#B33E3E',
+    },
   },
-  footerInner: {
-    borderTop: `1px solid #D9E0E7`,
-    display: ['block', null, 'flex'],
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: '35px 0 40px',
-  },
-  about: {
-    display: [null, null, null, 'grid', 'block'],
-    gridTemplateColumns: '205px 1fr 1fr',
-    alignItems: ['center'],
-    gridRow: ['3/4', null, '1/1', '3/4', 'unset'],
-    gridColumn: ['1/3', null, '1/2', '1/5', 'unset'],
+  footerBottom: {
+    mt: [6, null, null, 8],
+    pt: [5],
+    borderTop: '1px solid #E8E4DC',
   },
   copyright: {
-    color: rgba('#0F2137', 0.6),
-    fontSize: ['14px'],
-    mt: [3],
-    mr: [null, null, null, 'auto', 'unset'],
-    textAlign: ['left'],
+    color: '#8C8279',
+    fontSize: '13px',
+    textAlign: 'center',
+    fontFamily: 'body',
+    letterSpacing: '0.05em',
   },
 };
