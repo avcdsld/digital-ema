@@ -1,8 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { useRouter } from "next/router";
-import { jsx, Box, Container, Button } from 'theme-ui';
-import Sticky from 'react-stickynode';
+import { jsx, Box, Container } from 'theme-ui';
 import Logo from 'components/logo';
 import { NavLink, Link } from 'components/link';
 import { DrawerProvider } from 'contexts/drawer/drawer-provider';
@@ -17,31 +16,29 @@ export default function Header() {
   return (
     <DrawerProvider>
       <Box sx={styles.headerWrapper}>
-        <Sticky enabled={true} top={0} activeClass="is-sticky" innerZ={100}>
-          <Box as="header" sx={styles.header}>
-            <Container>
-              <Box sx={styles.headerInner}>
-                <Logo light sx={styles.logo} />
-                <Box as="nav" sx={styles.navbar} className="navbar">
-                  <Box as="ul" sx={styles.navList}>
-                    {pathName === '/' && menuItems.map(({ path, label }, i) => (
-                      <li key={i}>
-                        {path.startsWith('/') ? <Link path={path} label={label} /> : <NavLink path={path} label={label} />}
-                      </li>
-                    ))}
-                    {pathName != '/' && menuItems.map(({ path, label }, i) => (
-                      <li key={i}>
-                        {path.startsWith('/') ? <Link path={path} label={label} /> : <Link path={`/#${path}`} label={label} />}
-                      </li>
-                    ))}
-                  </Box>
+        <Box as="header" sx={styles.header}>
+          <Container>
+            <Box sx={styles.headerInner}>
+              <Logo light sx={styles.logo} />
+              <Box as="nav" sx={styles.navbar} className="navbar">
+                <Box as="ul" sx={styles.navList}>
+                  {pathName === '/' && menuItems.map(({ path, label }, i) => (
+                    <li key={i}>
+                      {path.startsWith('/') ? <Link path={path} label={label} /> : <NavLink path={path} label={label} />}
+                    </li>
+                  ))}
+                  {pathName != '/' && menuItems.map(({ path, label }, i) => (
+                    <li key={i}>
+                      {path.startsWith('/') ? <Link path={path} label={label} /> : <Link path={`/#${path}`} label={label} />}
+                    </li>
+                  ))}
                 </Box>
-                <LocaleToggle />
-                <NavbarDrawer />
               </Box>
-            </Container>
-          </Box>
-        </Sticky>
+              <LocaleToggle />
+              <NavbarDrawer />
+            </Box>
+          </Container>
+        </Box>
       </Box>
     </DrawerProvider>
   );
@@ -50,25 +47,17 @@ export default function Header() {
 const styles = {
   headerWrapper: {
     backgroundColor: 'transparent',
-    '.is-sticky': {
-      header: {
-        backgroundColor: '#B33E3E',
-        boxShadow: '0 4px 20px rgba(26, 19, 17, 0.3)',
-        paddingTop: '10px',
-        paddingBottom: '10px',
-      },
-    },
   },
   header: {
     position: 'fixed',
+    top: 0,
     left: 0,
     right: 0,
     py: 3,
     backgroundColor: '#B33E3E',
+    boxShadow: '0 4px 20px rgba(26, 19, 17, 0.3)',
+    zIndex: 100,
     transition: 'all 0.3s ease-in-out 0s',
-    '&.is-mobile-menu': {
-      backgroundColor: '#B33E3E',
-    },
   },
   headerInner: {
     display: 'flex',

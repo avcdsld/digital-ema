@@ -45,4 +45,41 @@ flow transactions send ./transactions/create_template_snake.cdc --network mainne
 # 間違えて id:6 と id:7 を別アカウントに登録してしまった
 flow transactions send ./transactions/create_template_snake.cdc --network mainnet --signer mainnet-account2
 flow transactions send ./transactions/add_allowed_template.cdc 8 --network mainnet --signer mainnet-account2
+
+flow transactions send ./transactions/create_template_horse.cdc --network mainnet --signer mainnet-account2
+flow transactions send ./transactions/add_allowed_template.cdc 9 --network mainnet --signer mainnet-account2
+
+flow transactions send ./transactions/create_template_fuji_v2.cdc --network mainnet --signer mainnet-account2
+flow transactions send ./transactions/add_allowed_template.cdc 10 --network mainnet --signer mainnet-account2
+
+flow transactions send ./transactions/create_template_origami_v2.cdc --network mainnet --signer mainnet-account2
+flow transactions send ./transactions/add_allowed_template.cdc 11 --network mainnet --signer mainnet-account2
+
+flow transactions send ./transactions/create_template_flower_v2.cdc --network mainnet --signer mainnet-account2
+flow transactions send ./transactions/add_allowed_template.cdc 12 --network mainnet --signer mainnet-account2
+
+flow transactions send ./transactions/create_template_dappy_v2.cdc --network mainnet --signer mainnet-account2
+flow transactions send ./transactions/add_allowed_template.cdc 13 --network mainnet --signer mainnet-account2
+```
+
+### Testnet
+
+
+```sh
+flow scripts execute ./scripts/get_template_ids.cdc 26469acda7819263 --network testnet
+
+flow transactions send ./transactions/create_template_horse.cdc --network testnet --signer testnet-account
+flow transactions send ./transactions/add_allowed_template.cdc 11 --network testnet --signer testnet-account
+
+flow transactions send ./transactions/create_template_fuji_v2.cdc --network testnet --signer testnet-account
+flow transactions send ./transactions/add_allowed_template.cdc 12 --network testnet --signer testnet-account
+
+flow transactions send ./transactions/create_template_origami_v2.cdc --network testnet --signer testnet-account
+flow transactions send ./transactions/add_allowed_template.cdc 13 --network testnet --signer testnet-account
+
+flow transactions send ./transactions/create_template_flower_v2.cdc --network testnet --signer testnet-account
+flow transactions send ./transactions/add_allowed_template.cdc 14 --network testnet --signer testnet-account
+
+flow transactions send ./transactions/create_template_dappy_v2.cdc --network testnet --signer testnet-account
+flow transactions send ./transactions/add_allowed_template.cdc 15 --network testnet --signer testnet-account
 ```

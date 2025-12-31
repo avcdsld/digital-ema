@@ -16,7 +16,7 @@ export default function Footer() {
         </Box>
         <Box sx={styles.footerBottom}>
           <Text as="p" sx={styles.copyright}>
-            © Ara ⛓️ Built on Flow
+            © Zeroichi Arakawa / Ara ⛓️ Built on Flow
           </Text>
         </Box>
       </Container>

@@ -4,7 +4,7 @@ import Head from 'next/head';
 export default function SEO({
   description = 'Digital Ema on Flow Blockchain',
   author = 'Ara',
-  meta,
+  meta = [],
   title = 'Digital Ema on Flow Blockchain',
 }) {
   const metaData = [
@@ -50,9 +50,3 @@ export default function SEO({
     </Head>
   );
 }
-
-SEO.defaultProps = {
-  lang: `en`,
-  meta: [],
-  description: ``,
-};

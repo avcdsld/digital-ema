@@ -14,19 +14,21 @@ export const showcaseAddress = network === "mainnet" ? "0x67fb6951287a2908" : "0
 export const templateCreatorAddress = network === "mainnet" ? "0x67fb6951287a2908" : "0x26469acda7819263";
 export const templateId = network === "mainnet" ? '1' : '1'; // Digital Ema - Dappy
 export const templateNameToId = network === "mainnet" ? {
-    dappy: '1',
     // dragon: '2',
-    snake: '8',
-    fuji: '3',
-    origami: '4',
-    flower: '5',
+    // snake: '8',
+    horse: '9',
+    fuji: '10',
+    origami: '11',
+    flower: '12',
+    dappy: '13',
 } : {
-    dappy: '1',
     // dragon: '2',
-    snake: '8',
-    fuji: '3',
-    origami: '4',
-    flower: '5',
+    // snake: '8',
+    horse: '11',
+    fuji: '12',
+    origami: '13',
+    flower: '14',
+    dappy: '15',
 };
 
 export const connectWallet = async (setter) => {
@@ -60,14 +62,20 @@ export const subscribeUser = (setter) => {
 };
 
 export const subscribeTx = (tx, setter) => {
-    const unsub = fcl.tx(tx).subscribe((currentTransaction) => {
-        console.log(currentTransaction);
-        if (fcl.tx.isSealed(currentTransaction)) {
-            console.log("Transaction is Sealed");
+    const txId = tx.transactionId || tx;
+
+    // WebSocketが不安定な場合があるため、ポーリングでフォールバック
+    const checkStatus = async () => {
+        try {
+            const status = await fcl.tx(txId).onceSealed();
+            console.log("Transaction is Sealed", status);
             setter(true);
-            unsub();
+        } catch (e) {
+            console.error("Transaction error:", e);
         }
-    });
+    };
+
+    checkStatus();
 };
 
 export const viewEmas = async (address) => {

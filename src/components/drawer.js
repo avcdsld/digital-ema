@@ -10,8 +10,8 @@ const Drawer = ({
   drawerHandler,
   toggleHandler,
   open,
-  width,
-  placement,
+  width = '320px',
+  placement = 'left',
   drawerStyle,
   closeBtnStyle,
   ...props
@@ -45,11 +45,6 @@ const Drawer = ({
       </Box>
     </Fragment>
   );
-};
-
-Drawer.defaultProps = {
-  width: '320px',
-  placement: 'left',
 };
 
 export default Drawer;

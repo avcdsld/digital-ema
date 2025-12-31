@@ -70,7 +70,7 @@
     "mainnet-account2": {
       "address": "67fb6951287a2908",
       "key": {
-        "index": 3,
+        "index": 7,
         "signatureAlgorithm": "ECDSA_secp256k1",
         "hashAlgorithm": "SHA3_256",
         "type": "file",

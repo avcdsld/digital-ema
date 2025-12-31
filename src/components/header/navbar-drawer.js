@@ -85,6 +85,7 @@ const styles = {
     flexShrink: '0',
     width: '26px',
     cursor: 'pointer',
+    color: '#FFFEF9',
     '@media screen and (min-width: 1024px)': {
       display: 'none',
     },
