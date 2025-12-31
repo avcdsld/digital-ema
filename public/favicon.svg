@@ -1,0 +1,37 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="woodBase" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#EDD4A0" />
+      <stop offset="20%" stop-color="#E8CC98" />
+      <stop offset="40%" stop-color="#E0C490" />
+      <stop offset="60%" stop-color="#EAD09C" />
+      <stop offset="80%" stop-color="#EDD4A0" />
+      <stop offset="100%" stop-color="#E4C894" />
+    </linearGradient>
+    <pattern id="woodGrain" patternUnits="userSpaceOnUse" width="64" height="8">
+      <rect width="64" height="8" fill="url(#woodBase)" />
+      <line x1="0" y1="2" x2="64" y2="2.3" stroke="#C8A060" stroke-width="0.8" opacity="0.35" />
+      <line x1="0" y1="5" x2="64" y2="4.7" stroke="#C09858" stroke-width="0.5" opacity="0.25" />
+    </pattern>
+    <clipPath id="emaShape">
+      <path d="M 32 4 L 58 20 L 58 58 L 6 58 L 6 20 Z" />
+    </clipPath>
+  </defs>
+
+  <!-- Ema board with wood grain -->
+  <g clip-path="url(#emaShape)">
+    <rect x="0" y="0" width="64" height="64" fill="url(#woodGrain)" />
+  </g>
+
+  <!-- Border -->
+  <path d="M 32 4 L 58 20 L 58 58 L 6 58 L 6 20 Z"
+        fill="none"
+        stroke="#B8956A"
+        stroke-width="2" />
+
+  <!-- Hanging rope hole -->
+  <circle cx="32" cy="12" r="2.5" fill="#9B003F" />
+
+  <!-- Simple rope indication -->
+  <path d="M 32 4 L 32 0" stroke="#9B003F" stroke-width="2" stroke-linecap="round" />
+</svg>
