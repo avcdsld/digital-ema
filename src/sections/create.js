@@ -365,7 +365,7 @@ const Create = () => {
             {mintMode === 'google' && !isLoading && !txId && (
               <span>
                 <p>{locale === 'ja'
-                  ? `Googleアカウント（${session?.user?.name}）で絵馬を作成します。絵馬に表示される名前は下のフォームで入力したものになります。`
+                  ? `Googleアカウント（${session?.user?.name}）で絵馬を作成します。絵馬に表示される名前はフォームで入力したものになります。`
                   : `Creating ema with Google account (${session?.user?.name}). The name shown on the ema will be what you entered in the form.`}</p>
                 <Button mr={2} onClick={mintWithGoogle}>{t.MODAL_SUBMIT}</Button>
                 <Button variant='text' onClick={() => setMintMode('choice')}>{locale === 'ja' ? '戻る' : 'Back'}</Button>
