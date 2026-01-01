@@ -5,13 +5,15 @@ import { Link as A } from 'theme-ui';
 import { useRouter } from 'next/router';
 import { RxExit } from "react-icons/rx";
 import { jsx, Box, Container, Button, Heading, Text, Grid } from 'theme-ui';
+import { useSession, signIn, signOut } from 'next-auth/react';
 import { connectWallet, logout, viewEmas, subscribeUser, flowviewUrl } from 'libs/flow';
 import { useLocale } from 'hooks/useLocale';
 
 const MyPage = () => {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const router = useRouter();
   const pathname = router.query.address;
+  const { data: session } = useSession();
 
   const [account, setAccount] = useState(null);
   const [address, setAddress] = useState(null);
@@ -80,11 +82,50 @@ const MyPage = () => {
             )}
           </Box>
           <Box as="figure" sx={styles.illustration}>
-            {!address && (
-              <Box sx={styles.buttonWrapper}>
-                <Button onClick={view}>
-                  {t.BUTTON_VIEW}
-                </Button>
+            {/* Google認証ユーザー向けメッセージ */}
+            {session && !address && (
+              <Box sx={styles.googleAuthMessage}>
+                <Text as="p" sx={styles.googleAuthText}>
+                  {locale === 'ja'
+                    ? `${session.user.name} さん、Googleアカウントで作成した絵馬は管理者アカウントが保管しています。「みんなのデジタル絵馬」から確認できます。`
+                    : `${session.user.name}, emas created with your Google account are stored in the admin account. You can find them in "Everyone's Digital Ema".`
+                  }
+                </Text>
+                <Box sx={styles.googleAuthButtons}>
+                  <Button as="a" href={locale === 'ja' ? '/ja#emas' : '/#emas'}>
+                    {locale === 'ja' ? 'みんなのデジタル絵馬を見る' : "View Everyone's Ema"}
+                  </Button>
+                  <Button variant="text" onClick={() => signOut()} sx={{ ml: 2 }}>
+                    {locale === 'ja' ? 'ログアウト' : 'Sign out'}
+                  </Button>
+                </Box>
+              </Box>
+            )}
+            {/* ログイン・接続選択 */}
+            {!session && !address && (
+              <Box sx={styles.authOptions}>
+                <Box
+                  sx={styles.authOption}
+                  onClick={() => signIn('google')}
+                >
+                  <Text sx={styles.authOptionTitle}>
+                    {locale === 'ja' ? 'Googleでログイン' : 'Sign in with Google'}
+                  </Text>
+                  <Text sx={styles.authOptionDesc}>
+                    {locale === 'ja' ? 'Googleアカウントで作成した絵馬を確認' : 'View emas created with Google'}
+                  </Text>
+                </Box>
+                <Box
+                  sx={styles.authOption}
+                  onClick={view}
+                >
+                  <Text sx={styles.authOptionTitle}>
+                    {locale === 'ja' ? 'ウォレットを接続' : 'Connect Wallet'}
+                  </Text>
+                  <Text sx={styles.authOptionDesc}>
+                    {locale === 'ja' ? 'ウォレットで作成した絵馬を確認' : 'View emas created with wallet'}
+                  </Text>
+                </Box>
               </Box>
             )}
             {emaSvgs.length > 0 && (
@@ -162,5 +203,59 @@ const styles = {
   buttonWrapper: {
     textAlign: ['center'],
     mb: [200],
+  },
+  googleAuthMessage: {
+    textAlign: 'center',
+    maxWidth: 500,
+    mx: 'auto',
+    p: 4,
+    mb: 4,
+    bg: '#F5F0E6',
+    borderRadius: '4px',
+  },
+  googleAuthText: {
+    color: '#2D2926',
+    fontSize: ['14px', null, null, '15px'],
+    lineHeight: 1.8,
+    mb: 3,
+  },
+  googleAuthButtons: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 2,
+  },
+  authOptions: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 3,
+    maxWidth: 400,
+    mx: 'auto',
+    mb: 8,
+  },
+  authOption: {
+    p: 4,
+    border: '1px solid #D9D4CB',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+    textAlign: 'center',
+    '&:hover': {
+      borderColor: '#B33E3E',
+      bg: 'rgba(179, 62, 62, 0.05)',
+    },
+  },
+  authOptionTitle: {
+    fontSize: '16px',
+    fontWeight: 500,
+    color: '#2D2926',
+    display: 'block',
+    mb: 1,
+  },
+  authOptionDesc: {
+    fontSize: '13px',
+    color: '#5C5552',
+    display: 'block',
   },
 };

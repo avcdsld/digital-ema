@@ -1,18 +1,23 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { jsx, Box, Textarea, Input, Button, Spinner, Container, Flex, Text } from 'theme-ui';
 import useWindowSize from 'react-use/lib/useWindowSize';
+import { useSession, signIn } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import EmaSvg from 'components/preview/ema-svg';
 import SectionHeading from 'components/section-heading';
 import Modal from 'react-modal';
 import Confetti from 'react-confetti';
 import { connectWallet, mintEma, subscribeTx, explorerUrl } from 'libs/flow';
 import { useLocale } from 'hooks/useLocale';
+import { sha256 } from 'libs/hash';
 
 const Create = () => {
   const { locale, t } = useLocale();
   const { width, height } = useWindowSize();
+  const router = useRouter();
+  const { data: session, status } = useSession();
   const [account, setAccount] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const [txId, setTxId] = useState(null);
@@ -27,8 +32,55 @@ const Create = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [showColorOptions, setShowColorOptions] = useState(false);
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
+  const [mintMode, setMintMode] = useState('choice'); // 'choice' | 'google' | 'wallet'
 
   Modal.setAppElement('#__next');
+
+  // Google OAuth後のリダイレクトを検知してモーダルを開く
+  useEffect(() => {
+    if (status === 'authenticated' && session && router.query.mint === 'google') {
+      // localStorageから入力値を復元
+      const savedData = localStorage.getItem('ema-draft');
+      if (savedData) {
+        try {
+          const data = JSON.parse(savedData);
+          setMessage(data.message || '');
+          setName(data.name || '');
+          setTemplateName(data.templateName || 'horse');
+          setSingleColor(data.singleColor || '#000000');
+          setDappyEyeColor(data.dappyEyeColor || '#ff5a9d');
+          setDappyStripe1Color(data.dappyStripe1Color || '#ffe922');
+          setDappyStripe2Color(data.dappyStripe2Color || '#60c5e5');
+        } catch (e) {
+          console.error('Failed to parse saved data:', e);
+        }
+      }
+      setMintMode('google');
+      setIsOpen(true);
+      // クエリパラメータを削除（ハッシュは維持）
+      const newUrl = router.asPath.split('?')[0];
+      router.replace(newUrl, undefined, { shallow: true });
+    }
+  }, [status, session, router.query.mint]);
+
+  // Googleログイン前に入力値を保存
+  const saveFormData = () => {
+    const data = {
+      message,
+      name,
+      templateName,
+      singleColor,
+      dappyEyeColor,
+      dappyStripe1Color,
+      dappyStripe2Color,
+    };
+    localStorage.setItem('ema-draft', JSON.stringify(data));
+  };
+
+  // mint成功後にlocalStorageをクリア
+  const clearFormData = () => {
+    localStorage.removeItem('ema-draft');
+  };
 
 
   const mint = async () => {
@@ -72,7 +124,66 @@ const Create = () => {
     }
   }
 
+  const mintWithGoogle = async () => {
+    try {
+      setLoading(true);
+
+      if (!message || !name) {
+        alert('Something Wrong.');
+        setLoading(false);
+        return;
+      }
+
+      const messageFontSize = message.length <= 7 ? '2.8em' :
+                                message.length <= 20 ? '1.8em' :
+                                  message.length <= 40 ? '1.5em' :
+                                    message.length <= 60 ? '1.2em' : '1em';
+
+      const googleIdHash = await sha256(session.user.id);
+
+      const params = templateName === 'dappy' ? {
+        message,
+        messageFontSize,
+        name: getTodayDateStr() + ' ' + name,
+        nameFontSize: '0.8em',
+        eyeColor: dappyEyeColor,
+        stripeColor1: dappyStripe1Color,
+        stripeColor2: dappyStripe2Color,
+      } : {
+        message,
+        messageFontSize,
+        name: getTodayDateStr() + ' ' + name,
+        nameFontSize: '0.8em',
+        color: singleColor,
+      };
+
+      const response = await fetch('/api/mint', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ templateName, params, googleIdHash }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setTxSealed(false);
+        setTxId(data.transactionId);
+        subscribeTx(data.transactionId, setTxSealed);
+        clearFormData(); // 成功後にlocalStorageをクリア
+      } else {
+        throw new Error(data.error);
+      }
+
+      setLoading(false);
+    } catch (e) {
+      console.log(e);
+      alert(JSON.stringify(e, Object.getOwnPropertyNames(e)));
+      setLoading(false);
+    }
+  };
+
   const openModal = async () => {
+    setMintMode('choice');
     setIsOpen(true);
   }
 
@@ -209,28 +320,96 @@ const Create = () => {
             contentLabel="Create Ema"
           >
             <h2>{!isTxSealed ? t.MODAL_TITLE_MAKE_EMA : t.MODAL_TITLE_COMPLETED_MAKING_EMA}</h2>
-            {!account ? (
+
+            {/* 選択画面 */}
+            {mintMode === 'choice' && !txId && (
+              <Box>
+                <p style={{ marginBottom: '20px' }}>{locale === 'ja' ? '作成方法を選んでください' : 'Choose how to create'}</p>
+                <Box
+                  sx={styles.mintOption}
+                  onClick={() => {
+                    if (session) {
+                      setMintMode('google');
+                    } else {
+                      // フォームデータを保存してからGoogleログイン
+                      saveFormData();
+                      signIn('google', { callbackUrl: `${window.location.origin}${locale === 'ja' ? '/ja' : ''}?mint=google#create` });
+                    }
+                  }}
+                >
+                  <Text sx={styles.mintOptionTitle}>
+                    {session
+                      ? (locale === 'ja' ? `Googleアカウント（${session.user.name}）で作成` : `Create with Google (${session.user.name})`)
+                      : (locale === 'ja' ? 'Googleで作成' : 'Create with Google')}
+                  </Text>
+                  <Text sx={styles.mintOptionDesc}>
+                    {locale === 'ja' ? 'ウォレット不要・簡単' : 'No wallet needed'}
+                  </Text>
+                </Box>
+                <Box
+                  sx={styles.mintOption}
+                  onClick={() => setMintMode('wallet')}
+                >
+                  <Text sx={styles.mintOptionTitle}>
+                    {locale === 'ja' ? 'ウォレットで作成' : 'Create with Wallet'}
+                  </Text>
+                  <Text sx={styles.mintOptionDesc}>
+                    {locale === 'ja' ? 'NFTを直接所有' : 'Own NFT directly'}
+                  </Text>
+                </Box>
+                <Button variant='text' onClick={closeModal} sx={{ mt: 3 }}>{t.MODAL_CANCEL}</Button>
+              </Box>
+            )}
+
+            {/* Google認証フロー */}
+            {mintMode === 'google' && !isLoading && !txId && (
+              <span>
+                <p>{locale === 'ja'
+                  ? `Googleアカウント（${session?.user?.name}）で絵馬を作成します。絵馬に表示される名前は下のフォームで入力したものになります。`
+                  : `Creating ema with Google account (${session?.user?.name}). The name shown on the ema will be what you entered in the form.`}</p>
+                <Button mr={2} onClick={mintWithGoogle}>{t.MODAL_SUBMIT}</Button>
+                <Button variant='text' onClick={() => setMintMode('choice')}>{locale === 'ja' ? '戻る' : 'Back'}</Button>
+              </span>
+            )}
+
+            {/* ウォレットフロー */}
+            {mintMode === 'wallet' && !account && !txId && (
               <span>
                 <p>{t.MODAL_MESSAGE1}</p>
                 <Button mr={2} onClick={() => connectWallet(setAccount)}>{t.MODAL_CONNECT_WALLET}</Button>
-                <Button variant='text' onClick={closeModal}>{t.MODAL_CANCEL}</Button>
+                <Button variant='text' onClick={() => setMintMode('choice')}>{locale === 'ja' ? '戻る' : 'Back'}</Button>
               </span>
-            ) : !isLoading && !txId ? (
+            )}
+            {mintMode === 'wallet' && account && !isLoading && !txId && (
               <span>
                 <p>{t.MODAL_MESSAGE2}</p>
                 <Button mr={2} onClick={mint}>{t.MODAL_SUBMIT}</Button>
                 <Button variant='text' onClick={closeModal}>{t.MODAL_CANCEL}</Button>
               </span>
-            ) : !isTxSealed ? (
+            )}
+
+            {/* 処理中 */}
+            {isLoading || (txId && !isTxSealed) ? (
               <span>
                 <p>{t.MODAL_MESSAGE3}</p>
                 {txId && <p><a style={{ color: '#2C4A6E' }} href={explorerUrl + txId} target={'_blank'}>{t.MODAL_CHECK_ON_FLOWDIVER}</a></p>}
                 <Spinner size={32} ml={2} mr={2} />
               </span>
-            ) : (
+            ) : null}
+
+            {/* 完了 */}
+            {isTxSealed && (
               <span>
                 <p>{t.MODAL_MESSAGE4}</p>
-                <p><a style={{ color: '#2C4A6E' }} href={locale === 'ja' ? `/ja/view/${account.addr}` : `/view/${account.addr}`}>{t.MODAL_GOTO_MY_EMA}</a></p>
+                {mintMode === 'wallet' && account && (
+                  <p><a style={{ color: '#2C4A6E' }} href={locale === 'ja' ? `/ja/view/${account.addr}` : `/view/${account.addr}`}>{t.MODAL_GOTO_MY_EMA}</a></p>
+                )}
+                {mintMode === 'google' && (
+                  <p><a style={{ color: '#2C4A6E', cursor: 'pointer' }} onClick={() => {
+                    closeModal();
+                    window.location.href = (locale === 'ja' ? '/ja' : '/') + '?t=' + Date.now() + '#emas';
+                  }}>{locale === 'ja' ? 'みんなのデジタル絵馬を見る' : 'View All Digital Ema'}</a></p>
+                )}
                 {txId && <p><a style={{ color: '#2C4A6E' }} href={explorerUrl + txId} target={'_blank'}>{t.MODAL_CHECK_ON_FLOWDIVER}</a></p>}
               </span>
             )}
@@ -420,6 +599,30 @@ const styles = {
     fontSize: '10px',
     color: '#5C5552',
     mt: 1,
+  },
+  mintOption: {
+    p: 3,
+    mb: 2,
+    border: '1px solid #D9D4CB',
+    borderRadius: '2px',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+    '&:hover': {
+      borderColor: '#B33E3E',
+      bg: 'rgba(179, 62, 62, 0.05)',
+    },
+  },
+  mintOptionTitle: {
+    fontSize: '16px',
+    fontWeight: 500,
+    color: '#2D2926',
+    display: 'block',
+    mb: 1,
+  },
+  mintOptionDesc: {
+    fontSize: '13px',
+    color: '#5C5552',
+    display: 'block',
   },
 };
 
